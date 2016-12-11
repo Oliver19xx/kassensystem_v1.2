@@ -14,21 +14,21 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.GridView;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
-public class TablesActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class TableActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener {
+
+    private Table table = new Table();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tables);
+        setContentView(R.layout.activity_table);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -44,13 +44,16 @@ public class TablesActivity extends AppCompatActivity implements NavigationView.
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
+        drawer.setDrawerListener(toggle);
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        loadTables();
+        Intent intent = getIntent();
+
+        // Hole Tisch Tischinformationen
+        loadTableInfo(intent.getStringExtra("tableID"));
     }
 
     @Override
@@ -104,54 +107,57 @@ public class TablesActivity extends AppCompatActivity implements NavigationView.
 //        } else if (id == R.id.nav_send) {
 //
 //        }
-
+//
 //        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 //        drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
-    private void loadTables() {
-        ArrayList<Table> tableList = new ArrayList<Table>();
-
+    public void loadTableInfo(String tableID){
         try {
             // HashMap erstellen und Daten für die DB-Abfrage im Inneren speichern
             HashMap<String, String> hashMap = new HashMap<>();
-            hashMap.put("method", "getTables");
+            hashMap.put("method", "getTable");
+            hashMap.put("tableID", tableID);
 
             // Hole mir den Rückgabe-String und speicher ihn in einer Variable ab
             String jsonString = new ActivityDataSource(hashMap).execute().get();
+            Log.d("myMessage","Table-jsonString = "+jsonString);
 
             // Erstelle aus dem JSON-String ein JSONArray
             JSONArray jsonArray = new JSONArray(jsonString);
+            JSONObject oneObject = jsonArray.getJSONObject(0);
 
-            for (int i = 0; i < jsonArray.length(); i++) {
-                try {
-                    // Hole aus dem JSONArray ein JSONObjekt und speicher die Daten in Variablen
-                    JSONObject oneObject = jsonArray.getJSONObject(i);
-                    int id = oneObject.getInt("ID");
-                    String name = oneObject.getString("name");
-                    int state = oneObject.getInt("state");
+            // Schreibe die Daten in das Table-Objekt
+            table.setTableId(oneObject.getInt("ID"));
+            table.setTableName(oneObject.getString("name"));
+            table.setTableState(oneObject.getInt("state"));
 
-                    // Füge die Daten aus dem JSONObjekt in die Erstellung eines neuen Tisches ein und hänge diesen an die Liste an
-                    tableList.add(new Table(id, name, state));
-//                    Log.d("myMessage", "ID->" + id + " | name->" + name + " | status->" + status);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        } catch (Exception e) {
+        }catch (Exception e){
             e.printStackTrace();
         }
+        
+        String state="";
+        // TODO: 11.12.2016 string aus resourcen ziehen
+        switch (table.getTableState()){
+            case 0:
+                state = "frei";
+                break;
+            case 1:
+                state = "reserviert";
+                break;
+            case 2:
+                state = "besetzt";
+                break;
+            default:
+        }
 
-        GridView gvTables = (GridView) findViewById(R.id.gvTables);
-        Log.d("myMessage","tableList.length()="+tableList.size());
-        TableGridAdapter adapter = new TableGridAdapter(this, R.layout.custom_button_layout, tableList);
-        Log.d("myMessage","TableGridAdapter => "+adapter.toString());
-//        try {
-            gvTables.setAdapter(adapter);
-//        }catch (Exception e){
-//            Log.d("myException",e.toString());
-//        }
+        StringBuilder titel = new StringBuilder();
+        titel.append("ID: "+table.getTableId());
+        titel.append(" ");
+        titel.append("Name: "+table.getTableName());
+        titel.append(" ");
+        titel.append("Status: "+state);
+        setTitle(titel.toString());
     }
-
 }

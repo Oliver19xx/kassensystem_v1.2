@@ -3,4 +3,9 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <!-- Tisch Status -->
+    <color name="tableFree">#036efa</color>
+    <color name="tableReserved">#faf603</color>
+    <color name="tableTaken">#4dfa03</color>
 </resources>

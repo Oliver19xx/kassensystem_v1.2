@@ -12,7 +12,16 @@
     <string name="nav_tables">Tische</string>
     <string name="nav_products">Produkte</string>
     <string name="nav_settings">Einstellungen</string>
+    <string name="nav_logout">Logout</string>
 
     <!-- store-information-->
     <string name="store_name">Woods Super Dooper Shop</string>
+    <string name="auth_key">test321</string>
+    <!--todo auth_key in ActivityDataSource.java einbauen-->
+
+    <!-- table-overview-legend -->
+    <string name="table_state_taken">besetzt</string>
+    <string name="table_state_reserved">reserviert</string>
+    <string name="table_state_free">frei</string>
+    <string name="title_activity_table">TableActivity</string>
 </resources>

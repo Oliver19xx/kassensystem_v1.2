@@ -15,17 +15,18 @@ import java.util.HashMap;
 
 public class ActivityDataSource extends AsyncTask<String, Void, String> {
 
-    public static final String AUTHKEY = "test321"; // TODO: 02.12.2016 Schlüssel generieren und in der Datenbank speichern
+    // TODO: 02.12.2016 Azhentifikations-Schlüssel generieren, in der Datenbank speichern und in der strings.xml hinterlegen
 
     public static final String POST_PARAM_KEYVALUE_SEPARATOR = "=";
     public static final String POST_PARAM_SEPARATOR = "&";
 
-    private  URLConnection conn;
+    private URLConnection conn;
     private String LOG = "myMessage";
     private HashMap<String, String> params = null;
 
     public ActivityDataSource(HashMap<String, String> params) {
         this.params = params;
+        this.params.put("authkey","test321");
     }
 
     @Override
@@ -49,14 +50,15 @@ public class ActivityDataSource extends AsyncTask<String, Void, String> {
         Log.d(LOG,"openConnection");
         //StringBuffer für das zusammensetzen der URL
         StringBuffer dataBuffer = new StringBuffer();
-        dataBuffer.append(URLEncoder.encode("authkey", "UTF-8"));
-        dataBuffer.append(POST_PARAM_KEYVALUE_SEPARATOR);
-        dataBuffer.append(URLEncoder.encode(AUTHKEY, "UTF-8"));
-        dataBuffer.append(POST_PARAM_SEPARATOR);
-        dataBuffer.append(URLEncoder.encode("method", "UTF-8"));
-        dataBuffer.append(POST_PARAM_KEYVALUE_SEPARATOR);
-        Log.d(LOG,"this.params.get(\"method\")"+this.params.get("method"));
-        dataBuffer.append(URLEncoder.encode((String) this.params.get("method"), "UTF-8"));
+
+        for (String key : this.params.keySet()){
+            Log.d("myMessage","PostParam= "+key+"["+this.params.get(key)+"]");
+            dataBuffer.append(URLEncoder.encode(key, "UTF-8"));
+            dataBuffer.append(POST_PARAM_KEYVALUE_SEPARATOR);
+            dataBuffer.append(URLEncoder.encode(this.params.get(key), "UTF-8"));
+            dataBuffer.append(POST_PARAM_SEPARATOR);
+        }
+
         //Adresse der PHP Schnittstelle für die Verbindung zur MySQL Datenbank
         URL url = new URL("http://oliverwerner.ninja/reader.php");
         conn = url.openConnection();

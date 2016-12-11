@@ -26,8 +26,6 @@ import java.util.HashMap;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    ArrayList<Table> tableList = new ArrayList<>();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,7 +37,7 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Activity refreshed", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
@@ -119,68 +117,21 @@ public class MainActivity extends AppCompatActivity
                 setTitle("Einstellungen");
                 break;
             }
+            case R.id.nav_logout: {
+                Log.d("myMessage","nav_logout");
+//                Intent intent = new Intent(this,MainActivity.class);
+//                startActivity(intent);
+                setTitle("Logout");
+                break;
+            }
             default: {
                 Log.d("myMessage","nav_default");
 
             }
         }
-        /*if (id == R.id.nav_tables) {
-            // Handle the camera action
-        } else if (id == R.id.nav_products) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_settings) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
-        }*/
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    private void loadTables() {
-        Log.d("myMessage", "loadTables()");
-
-
-//        final TextView textView = (TextView) new TextView(this);
-
-        try {
-            // HashMap erstellen und Daten für die DB-Abfrage im Inneren speichern
-            HashMap<String, String> hashMap = new HashMap<>();
-            hashMap.put("method", "getTables");
-
-            // Hole mir den Rückgabe-String und speicher ihn in einer Variable ab
-            String jsonString = new ActivityDataSource(hashMap).execute().get();
-
-            // Erstelle aus dem JSON-String ein JSONArray
-            JSONArray jsonArray = new JSONArray(jsonString);
-
-            for (int i = 0; i < jsonArray.length(); i++) {
-                try {
-                    // Hole aus dem JSONArray ein JSONObjekt und speicher die Daten in Variablen
-                    JSONObject oneObject = jsonArray.getJSONObject(i);
-                    int id = oneObject.getInt("ID");
-                    String name = oneObject.getString("name");
-                    int status = oneObject.getInt("status");
-
-                    // Füge die Daten aus dem JSONObjekt in die Erstellung eines neuen Tisches ein und hänge diesen an die Liste an
-                    tableList.add(new Table(id, name, status));
-                    Log.d("myMessage", "ID->" + id + " | name->" + name + " | status->" + status);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        GridView gvTables = (GridView) findViewById(R.id.gvTables);
-        TableGridAdapter adapter = new TableGridAdapter(this, R.layout.custom_button_layout, tableList);
-        gvTables.setAdapter(adapter);
     }
 }
