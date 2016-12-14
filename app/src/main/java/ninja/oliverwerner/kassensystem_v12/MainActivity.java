@@ -87,6 +87,7 @@ public class MainActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
+        // TODO: 12.12.2016 Diese Funktion wird bei allen Aktivities aufgerufen. Kann auf einmal  
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
@@ -105,8 +106,8 @@ public class MainActivity extends AppCompatActivity
             }
             case R.id.nav_products: {
                 Log.d("myMessage","nav_products");
-//                Intent intent = new Intent(this,MainActivity.class);
-//                startActivity(intent);
+                Intent intent = new Intent(this,ProductGroupsActivity.class);
+                startActivity(intent);
                 setTitle("Produkte");
                 break;
             }

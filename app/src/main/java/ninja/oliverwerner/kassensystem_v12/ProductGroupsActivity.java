@@ -14,27 +14,23 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ListView;
-import android.widget.Switch;
+import android.widget.GridView;
+import android.widget.ListAdapter;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
-public class TableActivity extends AppCompatActivity
+public class ProductGroupsActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
-    private Table table = new Table();
-    private Switch plus_minus = null;
-    private ProductListAdapter adapter = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_table);
+        setContentView(R.layout.activity_product_groups);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -56,13 +52,7 @@ public class TableActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        Intent intent = getIntent();
-
-        // Hole Tisch Tischinformationen
-        loadTableInfo(intent.getStringExtra("tableID"));
-
-        // Lade Liste Bestellter Produkte
-        loadOrderedList();
+        loadProductGroups();
     }
 
     @Override
@@ -78,7 +68,7 @@ public class TableActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+        getMenuInflater().inflate(R.menu.product_groups, menu);
         return true;
     }
 
@@ -118,9 +108,8 @@ public class TableActivity extends AppCompatActivity
             }
             case R.id.nav_products: {
                 Log.d("myMessage","nav_products");
-//                Intent intent = new Intent(this,MainActivity.class);
-//                startActivity(intent);
-                setTitle("Produkte");
+                Intent intent = new Intent(this,ProductGroupsActivity.class);
+                startActivity(intent);
                 break;
             }
             case R.id.nav_settings: {
@@ -148,93 +137,41 @@ public class TableActivity extends AppCompatActivity
         return true;
     }
 
-    public void loadTableInfo(String tableID){
+    public void loadProductGroups(){
+        ArrayList<ProductGroup> productGroupsList = new ArrayList<ProductGroup>();
+
         try {
             // HashMap erstellen und Daten für die DB-Abfrage im Inneren speichern
             HashMap<String, String> hashMap = new HashMap<>();
-            hashMap.put("method", "getTable");
-            hashMap.put("tableID", tableID);
+            hashMap.put("method", "getProductGroups");
 
             // Hole mir den Rückgabe-String und speicher ihn in einer Variable ab
             String jsonString = new ActivityDataSource(hashMap).execute().get();
-            Log.d("myMessage","Table-jsonString = "+jsonString);
 
             // Erstelle aus dem JSON-String ein JSONArray
             JSONArray jsonArray = new JSONArray(jsonString);
-            JSONObject oneObject = jsonArray.getJSONObject(0);
 
-            // Schreibe die Daten in das Table-Objekt
-            table.setTableId(oneObject.getInt("ID"));
-            table.setTableName(oneObject.getString("name"));
-            table.setTableState(oneObject.getInt("state"));
+            for (int i = 0; i < jsonArray.length(); i++) {
+                try {
+                    // Hole aus dem JSONArray ein JSONObjekt und speicher die Daten in Variablen
+                    JSONObject oneObject = jsonArray.getJSONObject(i);
+                    int id = oneObject.getInt("p_group_id");
+                    String name = oneObject.getString("p_group_name");
 
-        }catch (Exception e){
+                    productGroupsList.add(new ProductGroup(id, name));
+                    Log.d("myMessage", "p_group_id->" + id + " | p_group_name->" + name);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        
-        String state="";
-        // TODO: 11.12.2016 string aus resourcen ziehen
-        switch (table.getTableState()){
-            case 0:
-                state = "frei";
-                break;
-            case 1:
-                state = "reserviert";
-                break;
-            case 2:
-                state = "besetzt";
-                break;
-            default:
-        }
 
-        StringBuilder titel = new StringBuilder();
-        titel.append("ID: "+table.getTableId());
-        titel.append(" ");
-        titel.append("Name: "+table.getTableName());
-        titel.append(" ");
-        titel.append("Status: "+state);
-        setTitle(titel.toString());
-    }
-
-    public void loadOrderedList(){
-        plus_minus = (Switch) findViewById(R.id.plus_minus);
-        ListView listView = (ListView) findViewById(R.id.lvOrderedProducts);
-        adapter = new ProductListAdapter(this, R.layout.product_list_item_layout, new ArrayList<Product>());
-        listView.setAdapter(adapter);
-
-        // TODO: 12.12.2016 OrderedList aus der Datenbank holen
-        adapter.insert(new Product("Apfel", 0.43, 8),0);
-        adapter.insert(new Product("Banane", 1.33, 3),0);
-        adapter.insert(new Product("Kirsche", 10.99, 2),0);
-        adapter.insert(new Product("Birne", 0.03, 1),0);
-        adapter.insert(new Product("Weintraube", 1.55, 3),0);
-        adapter.insert(new Product("Orange", 4.33, 5),0);
-        adapter.insert(new Product("Nuss", 6.33, 2),0);
-
-    }
-
-    public void changePayNumber(View v) {
-        Product itemToRemove = (Product) v.getTag();
-        int pos = adapter.getPosition(itemToRemove);
-        String name = adapter.getItem(adapter.getPosition(itemToRemove)).getName()+"".toString();
-        String sPri = adapter.getItem(adapter.getPosition(itemToRemove)).getPrice()+"".toString();
-        String sBez = adapter.getItem(adapter.getPosition(itemToRemove)).getNumber()+"".toString();
-        int bez = Integer.parseInt(sBez.toString());
-        double dPri = Double.parseDouble(sPri.toString());
-        if (plus_minus.isChecked()) {
-            if( bez > 1) {
-                bez--;
-                adapter.remove(itemToRemove);
-                adapter.insert(new Product(name, dPri ,bez), pos);
-            }
-            else{
-                // TODO: 12.12.2016 ja nein Dialog
-                adapter.remove(itemToRemove);
-            }
-        } else {
-            bez++;
-            adapter.remove(itemToRemove);
-            adapter.insert(new Product(name, dPri ,bez), pos);
-        }
+        GridView gvTables = (GridView) findViewById(R.id.gvTables);
+        Log.d("myMessage","tableList.length()="+productGroupsList.size());
+        ProductGroupAdapter adapter = new ProductGroupAdapter(this, R.layout.custom_button_layout, productGroupsList);
+        Log.d("myMessage","TableGridAdapter => "+adapter);
+        gvTables.setAdapter(adapter); // TODO: 14.12.2016 Hier weitermachen adapter error null
     }
 }

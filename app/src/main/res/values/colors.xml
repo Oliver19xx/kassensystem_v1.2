@@ -5,7 +5,7 @@
     <color name="colorAccent">#FF4081</color>
 
     <!-- Tisch Status -->
-    <color name="tableFree">#036efa</color>
-    <color name="tableReserved">#faf603</color>
-    <color name="tableTaken">#4dfa03</color>
+    <color name="tableFree">#36a338</color>
+    <color name="tableReserved">#fcf964</color>
+    <color name="tableTaken">#fa3e4e</color>
 </resources>

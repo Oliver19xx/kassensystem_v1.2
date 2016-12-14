@@ -24,4 +24,10 @@
     <string name="table_state_reserved">reserviert</string>
     <string name="table_state_free">frei</string>
     <string name="title_activity_table">TableActivity</string>
+
+    <!-- ordered-list-item -->
+    <string name="plus_minus">+/-</string>
+    <string name="sum_pay_price">0.00</string>
+    <string name="pay_button">Bezahlen</string>
+    <string name="title_activity_product_groups">ProductGroupsActivity</string>
 </resources>

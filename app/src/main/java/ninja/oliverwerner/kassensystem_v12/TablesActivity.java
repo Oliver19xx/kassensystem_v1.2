@@ -89,24 +89,50 @@ public class TablesActivity extends AppCompatActivity implements NavigationView.
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
-//        int id = item.getItemId();
-//
-//        if (id == R.id.nav_camera) {
-//            // Handle the camera action
-//        } else if (id == R.id.nav_gallery) {
-//
-//        } else if (id == R.id.nav_slideshow) {
-//
-//        } else if (id == R.id.nav_manage) {
-//
-//        } else if (id == R.id.nav_share) {
-//
-//        } else if (id == R.id.nav_send) {
-//
-//        }
+        int id = item.getItemId();
 
-//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-//        drawer.closeDrawer(GravityCompat.START);
+        switch (id) {
+            case R.id.nav_dashboard: {
+                Log.d("myMessage","nav_dashboard");
+                Intent intent = new Intent(this,MainActivity.class);
+                startActivity(intent);
+                break;
+            }
+            case R.id.nav_tables: {
+                Log.d("myMessage","nav_tables");
+                Intent intent = new Intent(this,TablesActivity.class);
+                startActivity(intent);
+                break;
+            }
+            case R.id.nav_products: {
+                Log.d("myMessage","nav_products");
+                Intent intent = new Intent(this,ProductGroupsActivity.class);
+                startActivity(intent);
+                setTitle("Produkte");
+                break;
+            }
+            case R.id.nav_settings: {
+                Log.d("myMessage","nav_settings");
+//                Intent intent = new Intent(this,MainActivity.class);
+//                startActivity(intent);
+                setTitle("Einstellungen");
+                break;
+            }
+            case R.id.nav_logout: {
+                Log.d("myMessage","nav_logout");
+//                Intent intent = new Intent(this,MainActivity.class);
+//                startActivity(intent);
+                setTitle("Logout");
+                break;
+            }
+            default: {
+                Log.d("myMessage","nav_default");
+
+            }
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
@@ -128,9 +154,9 @@ public class TablesActivity extends AppCompatActivity implements NavigationView.
                 try {
                     // Hole aus dem JSONArray ein JSONObjekt und speicher die Daten in Variablen
                     JSONObject oneObject = jsonArray.getJSONObject(i);
-                    int id = oneObject.getInt("ID");
-                    String name = oneObject.getString("name");
-                    int state = oneObject.getInt("state");
+                    int id = oneObject.getInt("table_id");
+                    String name = oneObject.getString("table_name");
+                    int state = oneObject.getInt("table_state");
 
                     // Füge die Daten aus dem JSONObjekt in die Erstellung eines neuen Tisches ein und hänge diesen an die Liste an
                     tableList.add(new Table(id, name, state));
@@ -147,11 +173,7 @@ public class TablesActivity extends AppCompatActivity implements NavigationView.
         Log.d("myMessage","tableList.length()="+tableList.size());
         TableGridAdapter adapter = new TableGridAdapter(this, R.layout.custom_button_layout, tableList);
         Log.d("myMessage","TableGridAdapter => "+adapter.toString());
-//        try {
-            gvTables.setAdapter(adapter);
-//        }catch (Exception e){
-//            Log.d("myException",e.toString());
-//        }
+        gvTables.setAdapter(adapter);
     }
 
 }

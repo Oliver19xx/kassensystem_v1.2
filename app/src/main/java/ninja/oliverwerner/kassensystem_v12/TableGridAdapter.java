@@ -35,7 +35,6 @@ public class TableGridAdapter extends BaseAdapter {
     @NonNull
     @Override
     public View getView(final int position, final View convertView, ViewGroup parent) {
-        // TODO: 07.12.2016 Wieso wird die Methode getView() nicht ausgeführt?
         Log.d("myMessage","TableGridAdapter - getView()");
 
         View gridItem;
@@ -57,7 +56,7 @@ public class TableGridAdapter extends BaseAdapter {
                     // Der Tisch ist reserviert
                     button.setBackgroundColor(ContextCompat.getColor(context, R.color.tableReserved));
                     break;
-                case 3:
+                case 2:
                     // Der Tisch ist besetzt
                     button.setBackgroundColor(ContextCompat.getColor(context, R.color.tableTaken));
                     break;
