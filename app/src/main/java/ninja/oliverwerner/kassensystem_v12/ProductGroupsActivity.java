@@ -168,7 +168,7 @@ public class ProductGroupsActivity extends AppCompatActivity
             e.printStackTrace();
         }
 
-        GridView gvTables = (GridView) findViewById(R.id.gvTables);
+        GridView gvTables = (GridView) findViewById(R.id.gvProductGroups);
         Log.d("myMessage","tableList.length()="+productGroupsList.size());
         ProductGroupAdapter adapter = new ProductGroupAdapter(this, R.layout.custom_button_layout, productGroupsList);
         Log.d("myMessage","TableGridAdapter => "+adapter);
