@@ -50,11 +50,11 @@ public class ProductListAdapter extends ArrayAdapter<Product> {
             }
 
             if (product_price != null){
-                product_name.setText(""+item.getPrice());
+                product_price.setText(""+item.getPrice());
             }
 
             if (number_Button != null){
-                product_name.setText(""+item.getNumber());
+                number_Button.setText(""+item.getNumber());
             }
         }
 
