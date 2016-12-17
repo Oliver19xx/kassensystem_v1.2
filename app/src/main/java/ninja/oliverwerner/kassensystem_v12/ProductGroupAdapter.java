@@ -31,7 +31,7 @@ public class ProductGroupAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         Log.d("myMessage","ProductGroupAdapter - getView()");
 
         View item;
@@ -48,8 +48,26 @@ public class ProductGroupAdapter extends BaseAdapter {
         } else {
             item = convertView;
         }
-        return item;
 
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                StringBuilder sb = new StringBuilder();
+                sb.append("");
+                sb.append(getItem(position).getpGroupId());
+                String productGroupId = sb.toString();
+
+                // Übergabe-Daten sammeln
+                Bundle bundle = new Bundle();
+                bundle.putString("method", "getProducts");
+                bundle.putString("pGroupID", productGroupId);
+
+                // TableActivity starten
+                Intent intent = new Intent(view.getContext(), ProductsActivity.class);
+                intent.putExtras(bundle);
+                context.startActivity(intent);
+            }
+        });
+        return item;
     }
 
     @Override
@@ -58,7 +76,7 @@ public class ProductGroupAdapter extends BaseAdapter {
     }
 
     @Override
-    public Object getItem(int position) {
+    public ProductGroup getItem(int position) {
         return arrayList.get(position);
     }
 
@@ -66,4 +84,5 @@ public class ProductGroupAdapter extends BaseAdapter {
     public long getItemId(int position) {
         return position;
     }
+
 }

@@ -15,7 +15,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.GridView;
-import android.widget.ListAdapter;
+import android.widget.ListView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,13 +24,13 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class ProductGroupsActivity extends AppCompatActivity
+public class ProductsActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_product_groups);
+        setContentView(R.layout.activity_products);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -52,7 +52,9 @@ public class ProductGroupsActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        loadProductGroups();
+        Intent intent = getIntent();
+
+        loadProducts(intent.getStringExtra("pGroupID"));
     }
 
     @Override
@@ -68,7 +70,7 @@ public class ProductGroupsActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.product_groups, menu);
+        getMenuInflater().inflate(R.menu.products, menu);
         return true;
     }
 
@@ -137,13 +139,14 @@ public class ProductGroupsActivity extends AppCompatActivity
         return true;
     }
 
-    public void loadProductGroups(){
-        ArrayList<ProductGroup> productGroupsList = new ArrayList<ProductGroup>();
+    public void loadProducts(String pGroupID){
+        ArrayList<Product> productsList = new ArrayList<Product>();
 
         try {
             // HashMap erstellen und Daten für die DB-Abfrage im Inneren speichern
             HashMap<String, String> hashMap = new HashMap<>();
-            hashMap.put("method", "getProductGroups");
+            hashMap.put("method", "getProducts");
+            hashMap.put("pGroupID", pGroupID);
 
             // Hole mir den Rückgabe-String und speicher ihn in einer Variable ab
             String jsonString = new ActivityDataSource(hashMap).execute().get();
@@ -155,11 +158,22 @@ public class ProductGroupsActivity extends AppCompatActivity
                 try {
                     // Hole aus dem JSONArray ein JSONObjekt und speicher die Daten in Variablen
                     JSONObject oneObject = jsonArray.getJSONObject(i);
-                    int id = oneObject.getInt("p_group_id");
-                    String name = oneObject.getString("p_group_name");
 
-                    productGroupsList.add(new ProductGroup(id, name));
-                    Log.d("myMessage", "p_group_id->" + id + " | p_group_name->" + name);
+                    StringBuilder stringBuilder = new StringBuilder();
+                    stringBuilder.append(oneObject.getString("product_name"));
+                    stringBuilder.append(oneObject.getString("product_price"));
+                    stringBuilder.append(oneObject.getString("product_id"));
+                    stringBuilder.append(oneObject.getString("F_p_group_id"));
+
+                    Log.d("myMessage",stringBuilder.toString());
+
+                    productsList.add(new Product(
+                            oneObject.getString("product_name"),
+                            oneObject.getDouble("product_price"),
+                            oneObject.getInt("product_id"),
+                            oneObject.getInt("F_p_group_id")
+
+                            ));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -168,10 +182,9 @@ public class ProductGroupsActivity extends AppCompatActivity
             e.printStackTrace();
         }
 
-        GridView gvTables = (GridView) findViewById(R.id.gvProductGroups);
-        Log.d("myMessage","tableList.length()="+productGroupsList.size());
-        ProductGroupAdapter adapter = new ProductGroupAdapter(this, R.layout.custom_button_layout, productGroupsList);
-        Log.d("myMessage","TableGridAdapter => "+adapter);
-        gvTables.setAdapter(adapter);
+        ListView lvProducts = (ListView) findViewById(R.id.lvProducts);
+        Log.d("myMessage","tableList.length()="+productsList.size());
+        ProductListAdapter adapter = new ProductListAdapter(this, R.layout.custom_button_layout, productsList); // TODO: 15.12.2016 Adapter testen
+        lvProducts.setAdapter(adapter);
     }
 }

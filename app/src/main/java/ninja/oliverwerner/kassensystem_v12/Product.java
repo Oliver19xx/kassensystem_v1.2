@@ -10,11 +10,19 @@ public class Product {
     private String name = "";
     private int number = 0;
     private double price = 0;
+    private int productGroup = 0;
 
-    public Product(String name, double price, int number){
+    public Product(String name, double price, int p_id, int productGroup){
         this.setName(name);
-        this.setNumber(number);
+        this.setNumber(p_id);
         this.setPrice(price);
+        this.setProductGroup(productGroup);
+    }
+    public Product(String name, double price, int p_id){
+        this.setName(name);
+        this.setNumber(p_id);
+        this.setPrice(price);
+        this.setProductGroup(-1);
     }
     public String getName() {
         return this.name;
@@ -38,5 +46,13 @@ public class Product {
 
     public void setNumber(int number) {
         this.number = number;
+    }
+
+    public int getProductGroup() {
+        return productGroup;
+    }
+
+    public void setProductGroup(int productGroup) {
+        this.productGroup = productGroup;
     }
 }

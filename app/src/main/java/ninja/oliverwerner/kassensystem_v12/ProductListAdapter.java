@@ -2,6 +2,7 @@ package ninja.oliverwerner.kassensystem_v12;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,38 +30,41 @@ public class ProductListAdapter extends ArrayAdapter<Product> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View row = convertView;
-        ProductHolder holder = null;
+        View v = convertView;
 
-        LayoutInflater inflater = ((Activity) context).getLayoutInflater();
-        row = inflater.inflate(layoutResourceId,parent,false);
+        if(v == null){
+            LayoutInflater vi;
+            vi = LayoutInflater.from(getContext());
+            v = vi.inflate(layoutResourceId, null);
+        }
 
-        holder = new ProductHolder();
-        holder.productList = items.get(position);
-        holder.numberButton = (Button) row.findViewById(R.id.number_Button);
-        holder.numberButton.setTag(holder.productList);
+        Product item = getItem(position);
 
-        holder.name = (TextView)row.findViewById(R.id.product_name);
-        holder.price = (TextView)row.findViewById(R.id.product_price);
+        if (item != null){
+            TextView product_name = (TextView) v.findViewById(R.id.product_name);
+            TextView product_price = (TextView) v.findViewById(R.id.product_price);
+            TextView number_Button = (TextView) v.findViewById(R.id.number_Button);
 
-        row.setTag(holder);
+            if (product_name != null){
+                product_name.setText(item.getName());
+            }
 
-        setupItem(holder);
-        return row;
+            if (product_price != null){
+                product_name.setText(""+item.getPrice());
+            }
+
+            if (number_Button != null){
+                product_name.setText(item.getNumber());
+            }
+        }
+
+        return v;
 
     }
 
-    private void setupItem(ProductHolder holder){
-        holder.name.setText(holder.productList.getName());
-        holder.price.setText(String.valueOf(holder.productList.getPrice())+"€");
-        holder.numberButton.setText(String.valueOf(holder.productList.getNumber()));
-    }
-
-    public static class ProductHolder{
-        Product productList;
-        TextView name;
-        TextView price;
-        Button numberButton;
-
+    @Nullable
+    @Override
+    public Product getItem(int position) {
+        return super.getItem(position);
     }
 }
