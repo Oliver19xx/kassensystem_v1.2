@@ -184,7 +184,7 @@ public class ProductsActivity extends AppCompatActivity
 
         ListView lvProducts = (ListView) findViewById(R.id.lvProducts);
         Log.d("myMessage","tableList.length()="+productsList.size());
-        ProductListAdapter adapter = new ProductListAdapter(this, R.layout.custom_button_layout, productsList); // TODO: 15.12.2016 Adapter testen
+        ProductListAdapter adapter = new ProductListAdapter(this, R.layout.product_list_item_layout, productsList); // TODO: 15.12.2016 Adapter testen
         lvProducts.setAdapter(adapter);
     }
 }

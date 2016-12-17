@@ -54,7 +54,7 @@ public class ProductListAdapter extends ArrayAdapter<Product> {
             }
 
             if (number_Button != null){
-                product_name.setText(item.getNumber());
+                product_name.setText(""+item.getNumber());
             }
         }
 
