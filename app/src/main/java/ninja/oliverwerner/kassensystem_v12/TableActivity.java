@@ -210,7 +210,7 @@ public class TableActivity extends AppCompatActivity
         adapter.insert(new Product("Weintraube", 1.55, 3),0);
         adapter.insert(new Product("Orange", 4.33, 5),0);
         adapter.insert(new Product("Nuss", 6.33, 2),0);
-        adapter.insert(new Product("Prozessoren", 200.00,1),0);
+        adapter.insert(new Product("Schuh", 200.00,1),0);
 
     }
 
