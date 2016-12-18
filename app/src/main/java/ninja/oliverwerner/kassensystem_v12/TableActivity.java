@@ -226,7 +226,7 @@ public class TableActivity extends AppCompatActivity
                     stringBuilder.append(oneObject.getString("product_paid"));
 
                     Log.d("myMessage",stringBuilder.toString());
-                    // Wenn min noch ein Produkt vorhanden ist dann füge hinzu
+                    // Wenn mindestens noch ein Produkt vorhanden ist dann füge hinzu
                     if(( oneObject.getInt("product_count") - oneObject.getInt("product_paid")) != 0) {
                         adapter.insert(new Product(
                                 oneObject.getString("product_name"),
