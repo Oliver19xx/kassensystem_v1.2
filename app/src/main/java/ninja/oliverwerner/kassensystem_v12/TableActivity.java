@@ -118,9 +118,8 @@ public class TableActivity extends AppCompatActivity
             }
             case R.id.nav_products: {
                 Log.d("myMessage","nav_products");
-//                Intent intent = new Intent(this,MainActivity.class);
-//                startActivity(intent);
-                setTitle("Produkte");
+                Intent intent = new Intent(this,ProductGroupsActivity.class);
+                startActivity(intent);
                 break;
             }
             case R.id.nav_settings: {

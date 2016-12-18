@@ -56,10 +56,13 @@ public class ProductGroupAdapter extends BaseAdapter {
                 sb.append(getItem(position).getpGroupId());
                 String productGroupId = sb.toString();
 
+                String productGroupName = getItem(position).getpGroupName();
+
                 // Übergabe-Daten sammeln
                 Bundle bundle = new Bundle();
                 bundle.putString("method", "getProducts");
                 bundle.putString("pGroupID", productGroupId);
+                bundle.putString("productGroupName", productGroupName);
 
                 // TableActivity starten
                 Intent intent = new Intent(view.getContext(), ProductsActivity.class);

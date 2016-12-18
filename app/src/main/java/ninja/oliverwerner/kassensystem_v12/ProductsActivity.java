@@ -159,6 +159,10 @@ public class ProductsActivity extends AppCompatActivity
                     // Hole aus dem JSONArray ein JSONObjekt und speicher die Daten in Variablen
                     JSONObject oneObject = jsonArray.getJSONObject(i);
 
+                    setTitle(oneObject.getString("p_group_name"));
+
+
+
                     StringBuilder stringBuilder = new StringBuilder();
                     stringBuilder.append(oneObject.getString("product_name"));
                     stringBuilder.append(oneObject.getString("product_price"));
@@ -172,7 +176,6 @@ public class ProductsActivity extends AppCompatActivity
                             oneObject.getDouble("product_price"),
                             oneObject.getInt("product_id"),
                             oneObject.getInt("F_p_group_id")
-
                             ));
                 } catch (JSONException e) {
                     e.printStackTrace();
