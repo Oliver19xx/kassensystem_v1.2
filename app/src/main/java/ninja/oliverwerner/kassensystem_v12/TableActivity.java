@@ -62,7 +62,7 @@ public class TableActivity extends AppCompatActivity
         loadTableInfo(intent.getStringExtra("tableID"));
 
         // Lade Liste Bestellter Produkte
-        loadOrderedList();
+        loadOrderedList(intent.getStringExtra("tableID"));
     }
 
     @Override
@@ -196,22 +196,51 @@ public class TableActivity extends AppCompatActivity
         setTitle(titel.toString());
     }
 
-    public void loadOrderedList(){
+    public void loadOrderedList(String tableID){
         plus_minus = (Switch) findViewById(R.id.plus_minus);
         ListView listView = (ListView) findViewById(R.id.lvOrderedProducts);
         adapter = new ProductListAdapter(this, R.layout.product_list_item_layout, new ArrayList<Product>());
         listView.setAdapter(adapter);
 
-        // TODO: 12.12.2016 OrderedList aus der Datenbank holen
-        adapter.insert(new Product("Apfel", 0.43, 8),0);
-        adapter.insert(new Product("Banane", 1.33, 3),0);
-        adapter.insert(new Product("Kirsche", 10.99, 2),0);
-        adapter.insert(new Product("Birne", 0.03, 1),0);
-        adapter.insert(new Product("Weintraube", 1.55, 3),0);
-        adapter.insert(new Product("Orange", 4.33, 5),0);
-        adapter.insert(new Product("Nuss", 6.33, 2),0);
-        adapter.insert(new Product("Hut", 200.00,1),0);
+        try {
+            // HashMap erstellen und Daten für die DB-Abfrage im Inneren speichern
+            HashMap<String, String> hashMap = new HashMap<>();
+            hashMap.put("method", "getOrders");
+            hashMap.put("tableID", tableID);
 
+            // Hole mir den Rückgabe-String und speicher ihn in einer Variable ab
+            String jsonString = new ActivityDataSource(hashMap).execute().get();
+            Log.d("myMessage","Table-jsonString = "+jsonString);
+
+            // Erstelle aus dem JSON-String ein JSONArray
+            JSONArray jsonArray = new JSONArray(jsonString);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                try {
+                    // Hole aus dem JSONArray ein JSONObjekt und speicher die Daten in Variablen
+                    JSONObject oneObject = jsonArray.getJSONObject(i);
+
+                    StringBuilder stringBuilder = new StringBuilder();
+                    stringBuilder.append(oneObject.getString("product_name"));
+                    stringBuilder.append(oneObject.getString("product_price"));
+                    stringBuilder.append(oneObject.getString("product_count"));
+                    stringBuilder.append(oneObject.getString("product_paid"));
+
+                    Log.d("myMessage",stringBuilder.toString());
+                    // Wenn min noch ein Produkt vorhanden ist dann füge hinzu
+                    if(( oneObject.getInt("product_count") - oneObject.getInt("product_paid")) != 0) {
+                        adapter.insert(new Product(
+                                oneObject.getString("product_name"),
+                                oneObject.getDouble("product_price"),
+                                oneObject.getInt("product_count") - oneObject.getInt("product_paid")), 0);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     public void changePayNumber(View v) {
