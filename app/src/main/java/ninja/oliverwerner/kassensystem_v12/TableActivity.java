@@ -28,7 +28,7 @@ public class TableActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private Table table = new Table();
-    private Switch plus_minus = null;
+    static Switch plus_minus = null;
     private ProductListAdapter adapter = null;
 
     @Override
@@ -225,7 +225,7 @@ public class TableActivity extends AppCompatActivity
                     stringBuilder.append(oneObject.getString("product_paid"));
 
                     Log.d("myMessage",stringBuilder.toString());
-                    // Wenn mindestens noch ein Produkt vorhanden ist dann füge hinzu
+                    // Wenn mindestens   noch ein Produkt vorhanden ist dann füge hinzu
                     if(( oneObject.getInt("product_count") - oneObject.getInt("product_paid")) != 0) {
                         adapter.insert(new Product(
                                 oneObject.getString("product_name"),
@@ -239,31 +239,6 @@ public class TableActivity extends AppCompatActivity
 
         }catch (Exception e){
             e.printStackTrace();
-        }
-    }
-
-    public void changePayNumber(View v) {
-        Product itemToRemove = (Product) v.getTag();
-        int pos = adapter.getPosition(itemToRemove);
-        String name = adapter.getItem(adapter.getPosition(itemToRemove)).getName()+"".toString();
-        String sPri = adapter.getItem(adapter.getPosition(itemToRemove)).getPrice()+"".toString();
-        String sBez = adapter.getItem(adapter.getPosition(itemToRemove)).getNumber()+"".toString();
-        int bez = Integer.parseInt(sBez.toString());
-        double dPri = Double.parseDouble(sPri.toString());
-        if (plus_minus.isChecked()) {
-            if( bez > 1) {
-                bez--;
-                adapter.remove(itemToRemove);
-                adapter.insert(new Product(name, dPri ,bez), pos);
-            }
-            else{
-                // TODO: 12.12.2016 ja nein Dialog
-                adapter.remove(itemToRemove);
-            }
-        } else {
-            bez++;
-            adapter.remove(itemToRemove);
-            adapter.insert(new Product(name, dPri ,bez), pos);
         }
     }
 }

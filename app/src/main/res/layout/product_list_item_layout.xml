@@ -24,7 +24,6 @@
     <Button
         android:id="@+id/number_Button"
         android:layout_height="fill_parent"
-        android:onClick="changePayNumber"
         android:layout_width="44dp"
         android:layout_weight="1.43" />
 </LinearLayout>
