@@ -30,6 +30,7 @@ public class TableActivity extends AppCompatActivity
     private Table table = new Table();
     static Switch plus_minus = null;
     private ProductListAdapter adapter = null;
+    static int orderId = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +43,7 @@ public class TableActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Replace with your own action " + orderId, Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
@@ -213,24 +214,30 @@ public class TableActivity extends AppCompatActivity
 
             // Erstelle aus dem JSON-String ein JSONArray
             JSONArray jsonArray = new JSONArray(jsonString);
+            orderId = 0;
             for (int i = 0; i < jsonArray.length(); i++) {
                 try {
                     // Hole aus dem JSONArray ein JSONObjekt und speicher die Daten in Variablen
                     JSONObject oneObject = jsonArray.getJSONObject(i);
 
                     StringBuilder stringBuilder = new StringBuilder();
+                    stringBuilder.append(oneObject.getString("order_id"));
+                    stringBuilder.append(oneObject.getString("F_product_id"));
                     stringBuilder.append(oneObject.getString("product_name"));
                     stringBuilder.append(oneObject.getString("product_price"));
                     stringBuilder.append(oneObject.getString("product_count"));
                     stringBuilder.append(oneObject.getString("product_paid"));
 
+                    orderId =  oneObject.getInt("order_id");
                     Log.d("myMessage",stringBuilder.toString());
                     // Wenn mindestens   noch ein Produkt vorhanden ist dann füge hinzu
                     if(( oneObject.getInt("product_count") - oneObject.getInt("product_paid")) != 0) {
                         adapter.insert(new Product(
+                                oneObject.getInt("F_product_id"),
                                 oneObject.getString("product_name"),
                                 oneObject.getDouble("product_price"),
-                                oneObject.getInt("product_count") - oneObject.getInt("product_paid")), 0);
+                                oneObject.getInt("product_count") - oneObject.getInt("product_paid"),
+                                oneObject.getInt("order_id")), 0);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -69,21 +70,35 @@ public class ProductListAdapter extends ArrayAdapter<Product> {
             number_Button.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {
                     yes_no_dialog(position);
-                    Product itemToRemove = (Product) view.getTag();
-                    int pos = getPosition(itemToRemove);
+                    int productid = getItem(position).getProductID();
                     String name = getItem(position).getName()+"".toString();
                     String sPri = getItem(position).getPrice()+"".toString();
                     String sBez = getItem(position).getNumber()+"".toString();
+                    int  orderId = getItem(position).getOrderId();
                     int bez = Integer.parseInt(sBez.toString());
                     double dPri = Double.parseDouble(sPri.toString());
                     if (TableActivity.plus_minus.isChecked()) {
                         if( bez > 1) {
                             bez--;
                             remove(getItem(position));
-                            insert(new Product(name, dPri ,bez), position);
+                            insert(new Product(productid, name, dPri ,bez, orderId), position);
+
+                            try {
+                                HashMap<String, String> hashMap = new HashMap<>();
+                                hashMap.put("method", "updateOrder");
+                                hashMap.put("orderID", orderId + "".toString());
+                                hashMap.put("productID",productid+"".toString() );
+                                hashMap.put("mp_operator", "-");
+                                String jsonString = new ActivityDataSource(hashMap).execute().get();
+
+                            }catch (Exception e){
+                                e.printStackTrace();
+                            }
+                            Log.d("DatabaseStatement", "i hope");
+
                         }
                         else{
-                            // TODO: 12.12.2016 ja nein Dialog
+                            // TODO: 19.12.2016 Datenbankanbindung erstellen mit dem befehl das das produkt komplett gelöscht wird. Absprache mit Oliver
                             builder.setMessage("You want to delete "+name);
                             AlertDialog alert = builder.create();
                             alert.show();
@@ -91,7 +106,17 @@ public class ProductListAdapter extends ArrayAdapter<Product> {
                     } else {
                         bez++;
                         remove(getItem(position));
-                        insert(new Product(name, dPri ,bez), position);
+                        insert(new Product(productid, name, dPri ,bez, orderId), position);
+                        try {
+                            HashMap<String, String> hashMap = new HashMap<>();
+                            hashMap.put("method", "updateOrder");
+                            hashMap.put("orderID", orderId + "".toString());
+                            hashMap.put("productID", productid + "".toString());
+                            hashMap.put("mp_operator", "+");
+                            String jsonString = new ActivityDataSource(hashMap).execute().get();
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
                     }
                 }
             });

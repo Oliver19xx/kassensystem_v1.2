@@ -7,23 +7,30 @@ import java.io.Serializable;
  */
 
 public class Product {
+    private int productID = 0;
     private String name = "";
     private int number = 0;
     private double price = 0;
+    private int orderId = 0;
     private int productGroup = 0;
 
     public Product(String name, double price, int p_id, int productGroup){
+        this.setProductID(-1);
         this.setName(name);
         this.setNumber(p_id);
         this.setPrice(price);
         this.setProductGroup(productGroup);
+        this.setOrderId(-1);
     }
-    public Product(String name, double price, int p_id){
+    public Product(int productID,String name, double price, int p_id, int orderId){
+        this.setProductID(productID);
         this.setName(name);
         this.setNumber(p_id);
         this.setPrice(price);
+        this.setOrderId(orderId);
         this.setProductGroup(-1);
     }
+
     public String getName() {
         return this.name;
     }
@@ -55,4 +62,12 @@ public class Product {
     public void setProductGroup(int productGroup) {
         this.productGroup = productGroup;
     }
+
+    public void  setProductID(int productID){ this.productID = productID;}
+
+    public int getProductID(){ return productID; }
+
+    public int getOrderId(){return orderId;}
+
+    public void setOrderId(int orderId){ this.orderId = orderId;}
 }
