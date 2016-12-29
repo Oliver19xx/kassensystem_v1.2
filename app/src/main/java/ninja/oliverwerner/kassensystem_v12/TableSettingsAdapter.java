@@ -22,8 +22,8 @@ import java.util.List;
 public class TableSettingsAdapter extends BaseAdapter {
 
     private int layoutResourceId;
-    private List<Table> items;
-    private Context context;
+    private List<Table> items = null;
+    private Context context = null;
     private View v;
 
 
@@ -35,7 +35,7 @@ public class TableSettingsAdapter extends BaseAdapter {
 
     @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         Log.d("myMessage","TableSettingsAdapter - getView() - "+position+"/"+getCount());
 
         v = convertView;
@@ -43,6 +43,7 @@ public class TableSettingsAdapter extends BaseAdapter {
         if(v == null){
             LayoutInflater vi;
             vi = LayoutInflater.from(context);
+//            vi = (LayoutInflater) context.getSystemService(this.context.LAYOUT_INFLATER_SERVICE);
             v = vi.inflate(layoutResourceId, null);
         }
 
@@ -84,7 +85,7 @@ public class TableSettingsAdapter extends BaseAdapter {
     @Nullable
     @Override
     public Table getItem(int position) {
-        return getItem(position);
+        return items.get(position);
     }
 
     @Override
