@@ -26,6 +26,7 @@ import java.util.HashMap;
 
 public class ProductGroupsActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    static int orderOrChange = 0 ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +52,9 @@ public class ProductGroupsActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        Intent intent = getIntent();
+        orderOrChange = intent.getIntExtra("order",0);
 
         loadProductGroups();
     }

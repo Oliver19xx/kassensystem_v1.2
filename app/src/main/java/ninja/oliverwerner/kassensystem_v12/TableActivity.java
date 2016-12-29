@@ -43,8 +43,15 @@ public class TableActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action " + orderId, Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                if (orderId != 0) {
+                    Intent intent = new Intent(view.getContext(), ProductGroupsActivity.class);
+                    intent.putExtra("order", 1);
+                    startActivity(intent);
+                }else{
+                    // TODO: 29.12.2016 neue OrderBestellen und orderid Abfragen dann productgroupsactivity starten
+                    Snackbar.make(view, "In Arbeit", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                }
             }
         });
 
@@ -120,6 +127,7 @@ public class TableActivity extends AppCompatActivity
             case R.id.nav_products: {
                 Log.d("myMessage","nav_products");
                 Intent intent = new Intent(this,ProductGroupsActivity.class);
+                intent.putExtra("orderId","");
                 startActivity(intent);
                 break;
             }
