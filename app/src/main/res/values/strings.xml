@@ -4,7 +4,7 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">Einstellungen</string>
     <string name="title_activity_tables">TablesActivity</string>
 
     <!-- side-menu -->
@@ -31,4 +31,8 @@
     <string name="pay_button">Bezahlen</string>
     <string name="title_activity_product_groups">ProductGroupsActivity</string>
     <string name="title_activity_products">ProductsActivity</string>
+    <string name="title_activity_tables_settings">tablesSettingsActivity</string>
+
+    <!-- essentials -->
+    <string name="apply">anwenden</string>
 </resources>

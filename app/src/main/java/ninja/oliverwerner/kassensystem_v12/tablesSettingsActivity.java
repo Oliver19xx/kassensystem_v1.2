@@ -23,14 +23,15 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
-public class ProductsActivity extends AppCompatActivity
+public class TablesSettingsActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_products);
+        setContentView(R.layout.activity_tables_settings);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -52,9 +53,7 @@ public class ProductsActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        Intent intent = getIntent();
-
-        loadProducts(intent.getStringExtra("pGroupID"));
+        loadTableSettings();
     }
 
     @Override
@@ -112,6 +111,7 @@ public class ProductsActivity extends AppCompatActivity
                 Log.d("myMessage","nav_products");
                 Intent intent = new Intent(this,ProductGroupsActivity.class);
                 startActivity(intent);
+                setTitle("Produkte");
                 break;
             }
             case R.id.nav_settings: {
@@ -139,14 +139,13 @@ public class ProductsActivity extends AppCompatActivity
         return true;
     }
 
-    public void loadProducts(String pGroupID){
-        ArrayList<Product> productsList = new ArrayList<Product>();
+    public void loadTableSettings(){
+        ArrayList<Table> tableList = new ArrayList<Table>();
 
         try {
             // HashMap erstellen und Daten für die DB-Abfrage im Inneren speichern
             HashMap<String, String> hashMap = new HashMap<>();
-            hashMap.put("method", "getProducts");
-            hashMap.put("pGroupID", pGroupID);
+            hashMap.put("method", "getTables");
 
             // Hole mir den Rückgabe-String und speicher ihn in einer Variable ab
             String jsonString = new ActivityDataSource(hashMap).execute().get();
@@ -156,27 +155,16 @@ public class ProductsActivity extends AppCompatActivity
 
             for (int i = 0; i < jsonArray.length(); i++) {
                 try {
+                    // TODO: 19.12.2016 Abfrage von "return_type" (jsonArray['return_type'])
                     // Hole aus dem JSONArray ein JSONObjekt und speicher die Daten in Variablen
                     JSONObject oneObject = jsonArray.getJSONObject(i);
+                    int id = oneObject.getInt("table_id");
+                    String name = oneObject.getString("table_name");
+                    int state = oneObject.getInt("table_state");
 
-                    setTitle(oneObject.getString("p_group_name"));
-
-
-
-                    StringBuilder stringBuilder = new StringBuilder();
-                    stringBuilder.append(oneObject.getString("product_name"));
-                    stringBuilder.append(oneObject.getString("product_price"));
-                    stringBuilder.append(oneObject.getString("product_id"));
-                    stringBuilder.append(oneObject.getString("F_p_group_id"));
-
-                    Log.d("myMessage",stringBuilder.toString());
-
-                    productsList.add(new Product(
-                            oneObject.getString("product_name"),
-                            oneObject.getDouble("product_price"),
-                            oneObject.getInt("product_id"),
-                            oneObject.getInt("F_p_group_id")
-                            ));
+                    // Füge die Daten aus dem JSONObjekt in die Erstellung eines neuen Tisches ein und hänge diesen an die Liste an
+                    tableList.add(new Table(id, name, state));
+                    Log.d("myMessage", "loadTableSettings() - ID->" + id + " | name->" + name + " | status->" + state);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -185,9 +173,10 @@ public class ProductsActivity extends AppCompatActivity
             e.printStackTrace();
         }
 
-        ListView lvProducts = (ListView) findViewById(R.id.lvProducts);
-        Log.d("myMessage","tableList.length()="+productsList.size());
-        ProductListAdapter adapter = new ProductListAdapter(this, R.layout.product_list_item_layout, productsList); // TODO: 15.12.2016 Adapter testen
-        lvProducts.setAdapter(adapter);
+        ListView lvTableSettings = (ListView) findViewById(R.id.lvTableSettings);
+        Log.d("myMessage","tableList.length()="+tableList.size());
+        TableSettingsAdapter adapter = new TableSettingsAdapter(this, R.layout.custom_button_layout, tableList);
+        Log.d("myMessage","TableGridAdapter => "+adapter.toString());
+        lvTableSettings.setAdapter(adapter);
     }
 }
