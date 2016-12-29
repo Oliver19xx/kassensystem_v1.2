@@ -175,7 +175,7 @@ public class TablesSettingsActivity extends AppCompatActivity
 
         ListView lvTableSettings = (ListView) findViewById(R.id.lvTableSettings);
         Log.d("myMessage","tableList.length()="+tableList.size());
-        TableSettingsAdapter adapter = new TableSettingsAdapter(this, R.layout.custom_button_layout, tableList);
+        TableSettingsAdapter adapter = new TableSettingsAdapter(this, R.layout.tables_settings_item_layout, tableList);
         Log.d("myMessage","TableGridAdapter => "+adapter.toString());
         lvTableSettings.setAdapter(adapter);
     }

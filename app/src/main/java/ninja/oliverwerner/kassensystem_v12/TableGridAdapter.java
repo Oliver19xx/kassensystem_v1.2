@@ -20,7 +20,7 @@ import java.util.ArrayList;
  */
 
 public class TableGridAdapter extends BaseAdapter {
-
+    // TODO: 29.12.2016 Items werden beim hin und her scrollen nicht korekt wieder aufgebaut
     private Context context = null;
     private int resource = 0;
     private ArrayList<Table> arrayList = null;
