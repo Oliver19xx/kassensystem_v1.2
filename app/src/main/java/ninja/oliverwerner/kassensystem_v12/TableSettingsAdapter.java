@@ -13,6 +13,10 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -47,15 +51,15 @@ public class TableSettingsAdapter extends BaseAdapter {
             v = vi.inflate(layoutResourceId, null);
         }
 
-        Table item = getItem(position);
+        final Table item = getItem(position);
 
         if (item != null) {
-            CheckBox checkBox = (CheckBox) v.findViewById(R.id.checkBox);
+            final CheckBox checkBox = (CheckBox) v.findViewById(R.id.checkBox);
             TextView tableName = (TextView) v.findViewById(R.id.tableName);
             Button apply_button = (Button) v.findViewById(R.id.apply_button);
 
             if (checkBox != null) {
-                if (item.getTableState() == 1) {
+                if (item.getTableState() != 3) {
                     checkBox.setChecked(true);
                 } else {
                     checkBox.setChecked(false);
@@ -73,7 +77,26 @@ public class TableSettingsAdapter extends BaseAdapter {
                     }
                 });
             }
+
+            apply_button.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View view) {
+                    try {
+                        // HashMap erstellen und Daten für die DB-Abfrage im Inneren speichern
+                        HashMap<String, String> hashMap = new HashMap<>();
+                        hashMap.put("method", "switchTableState");
+                        hashMap.put("tableID", ""+item.getTableId());
+                        hashMap.put("tableState", Boolean.toString(checkBox.isChecked()));
+
+                        // Befehl abschicken
+                        new ActivityDataSource(hashMap).execute().get();
+
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }
+            });
         }
+
         return v;
     }
 

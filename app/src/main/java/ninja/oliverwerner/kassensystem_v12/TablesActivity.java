@@ -139,7 +139,7 @@ public class TablesActivity extends AppCompatActivity implements NavigationView.
         try {
             // HashMap erstellen und Daten für die DB-Abfrage im Inneren speichern
             HashMap<String, String> hashMap = new HashMap<>();
-            hashMap.put("method", "getTables");
+            hashMap.put("method", "getActivTables");
 
             // Hole mir den Rückgabe-String und speicher ihn in einer Variable ab
             String jsonString = new ActivityDataSource(hashMap).execute().get();
