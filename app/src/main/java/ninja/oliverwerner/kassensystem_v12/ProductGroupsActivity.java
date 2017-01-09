@@ -26,7 +26,7 @@ import java.util.HashMap;
 
 public class ProductGroupsActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    static int orderOrChange = 0 ;
+    static int table_id = 0 ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +54,7 @@ public class ProductGroupsActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         Intent intent = getIntent();
-        orderOrChange = intent.getIntExtra("order",0);
+        table_id = intent.getIntExtra("table_id",0);
 
         loadProductGroups();
     }
@@ -153,7 +153,7 @@ public class ProductGroupsActivity extends AppCompatActivity
             String jsonString = new ActivityDataSource(hashMap).execute().get();
 
             // Erstelle aus dem JSON-String ein JSONArray
-            JSONArray jsonArray = new JSONArray(jsonString);
+            JSONArray jsonArray = new JSONObject(jsonString).getJSONArray("data");
 
             for (int i = 0; i < jsonArray.length(); i++) {
                 try {
@@ -163,7 +163,6 @@ public class ProductGroupsActivity extends AppCompatActivity
                     String name = oneObject.getString("p_group_name");
 
                     productGroupsList.add(new ProductGroup(id, name));
-                    Log.d("myMessage", "p_group_id->" + id + " | p_group_name->" + name);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

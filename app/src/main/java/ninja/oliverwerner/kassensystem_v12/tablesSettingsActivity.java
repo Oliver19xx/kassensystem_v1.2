@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class TablesSettingsActivity extends AppCompatActivity
+class TablesSettingsActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     @Override
@@ -151,7 +151,7 @@ public class TablesSettingsActivity extends AppCompatActivity
             String jsonString = new ActivityDataSource(hashMap).execute().get();
 
             // Erstelle aus dem JSON-String ein JSONArray
-            JSONArray jsonArray = new JSONArray(jsonString);
+            JSONArray jsonArray = new JSONObject(jsonString).getJSONArray("data");
 
             for (int i = 0; i < jsonArray.length(); i++) {
                 try {

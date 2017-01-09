@@ -119,7 +119,7 @@ public class ProductListAdapter extends ArrayAdapter<Product> {
                                 e.printStackTrace();
                             }
                         }
-                    }else if(ProductGroupsActivity.orderOrChange != 0){
+                    }else if(ProductGroupsActivity.table_id != 0){
                         Snackbar.make(view, "you will put the product on an order " , Snackbar.LENGTH_LONG)
                                 .setAction("Action", null).show();
                         // TODO: 29.12.2016 Datenbankabfrage fürs einfügen des Produktes zur order erstellen. Mit Oliver absprechen 

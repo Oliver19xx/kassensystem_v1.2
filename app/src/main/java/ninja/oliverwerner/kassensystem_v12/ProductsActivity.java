@@ -152,7 +152,7 @@ public class ProductsActivity extends AppCompatActivity
             String jsonString = new ActivityDataSource(hashMap).execute().get();
 
             // Erstelle aus dem JSON-String ein JSONArray
-            JSONArray jsonArray = new JSONArray(jsonString);
+            JSONArray jsonArray = new JSONObject(jsonString).getJSONArray("data");
 
             for (int i = 0; i < jsonArray.length(); i++) {
                 try {

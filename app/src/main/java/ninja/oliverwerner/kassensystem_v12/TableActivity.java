@@ -43,15 +43,9 @@ public class TableActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (orderId != 0) {
                     Intent intent = new Intent(view.getContext(), ProductGroupsActivity.class);
-                    intent.putExtra("order", 1);
+                    intent.putExtra("table_id", 1);
                     startActivity(intent);
-                }else{
-                    // TODO: 29.12.2016 neue OrderBestellen und orderid Abfragen dann productgroupsactivity starten
-                    Snackbar.make(view, "In Arbeit", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
-                }
             }
         });
 
@@ -168,7 +162,7 @@ public class TableActivity extends AppCompatActivity
             Log.d("myMessage","Table-jsonString = "+jsonString);
 
             // Erstelle aus dem JSON-String ein JSONArray
-            JSONArray jsonArray = new JSONArray(jsonString);
+            JSONArray jsonArray = new JSONObject(jsonString).getJSONArray("data");
             JSONObject oneObject = jsonArray.getJSONObject(0);
 
             // Schreibe die Daten in das Table-Objekt
@@ -221,7 +215,7 @@ public class TableActivity extends AppCompatActivity
             Log.d("myMessage","Table-jsonString = "+jsonString);
 
             // Erstelle aus dem JSON-String ein JSONArray
-            JSONArray jsonArray = new JSONArray(jsonString);
+            JSONArray jsonArray = new JSONObject(jsonString).getJSONArray("data");
             orderId = 0;
             for (int i = 0; i < jsonArray.length(); i++) {
                 try {
