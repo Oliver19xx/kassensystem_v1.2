@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -55,7 +56,7 @@ public class TableSettingsAdapter extends BaseAdapter {
 
         if (item != null) {
             final CheckBox checkBox = (CheckBox) v.findViewById(R.id.checkBox);
-            TextView tableName = (TextView) v.findViewById(R.id.tableName);
+            final EditText tableName = (EditText) v.findViewById(R.id.tableName);
             Button apply_button = (Button) v.findViewById(R.id.apply_button);
 
             if (checkBox != null) {
@@ -73,28 +74,24 @@ public class TableSettingsAdapter extends BaseAdapter {
             if (apply_button != null) {
                 apply_button.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View view) {
+                        try {
+                            // HashMap erstellen und Daten für die DB-Abfrage im Inneren speichern
+                            HashMap<String, String> hashMap = new HashMap<>();
+                            hashMap.put("method", "switchTableState");
+                            hashMap.put("tableID", ""+item.getTableId());
+                            hashMap.put("tableState", Boolean.toString(checkBox.isChecked()));
+                            hashMap.put("tableName",tableName.getText().toString());
 
+                            // Befehl abschicken
+                            new ActivityDataSource(hashMap).execute().get();
+
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
                     }
                 });
             }
 
-            apply_button.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View view) {
-                    try {
-                        // HashMap erstellen und Daten für die DB-Abfrage im Inneren speichern
-                        HashMap<String, String> hashMap = new HashMap<>();
-                        hashMap.put("method", "switchTableState");
-                        hashMap.put("tableID", ""+item.getTableId());
-                        hashMap.put("tableState", Boolean.toString(checkBox.isChecked()));
-
-                        // Befehl abschicken
-                        new ActivityDataSource(hashMap).execute().get();
-
-                    }catch (Exception e){
-                        e.printStackTrace();
-                    }
-                }
-            });
         }
 
         return v;
