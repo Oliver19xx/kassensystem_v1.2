@@ -31,7 +31,7 @@
     <string name="pay_button">Bezahlen</string>
     <string name="title_activity_product_groups">ProductGroupsActivity</string>
     <string name="title_activity_products">ProductsActivity</string>
-    <string name="title_activity_tables_settings">tablesSettingsActivity</string>
+    <string name="title_activity_tables_settings">TablesSettingsActivity</string>
 
     <!-- essentials -->
     <string name="apply">anwenden</string>

@@ -77,11 +77,12 @@ public class TableSettingsAdapter extends BaseAdapter {
                         try {
                             // HashMap erstellen und Daten für die DB-Abfrage im Inneren speichern
                             HashMap<String, String> hashMap = new HashMap<>();
-                            hashMap.put("method", "switchTableState");
+                            hashMap.put("method", "updateTable");
                             hashMap.put("tableID", ""+item.getTableId());
                             hashMap.put("tableState", Boolean.toString(checkBox.isChecked()));
                             hashMap.put("tableName",tableName.getText().toString());
 
+                            Log.d("myMessage","TableSettingsAdapter - tableName: "+tableName.getText().toString());
                             // Befehl abschicken
                             new ActivityDataSource(hashMap).execute().get();
 
