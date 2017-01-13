@@ -11,23 +11,23 @@ public class Product {
     private String name = "";
     private int number = 0;
     private double price = 0;
-    private int orderId = 0;
+    private int tableid = 0;
     private int productGroup = 0;
 
     public Product(String name, double price, int p_id, int productGroup){
-        this.setProductID(-1);
+        this.setProductID(p_id);
         this.setName(name);
         this.setNumber(p_id);
         this.setPrice(price);
         this.setProductGroup(productGroup);
-        this.setOrderId(-1);
+        this.setTableId(-1);
     }
-    public Product(int productID,String name, double price, int p_id, int orderId){
+    public Product(int productID,String name, double price, int p_id, int tableid){
         this.setProductID(productID);
         this.setName(name);
         this.setNumber(p_id);
         this.setPrice(price);
-        this.setOrderId(orderId);
+        this.setTableId(tableid);
         this.setProductGroup(-1);
     }
 
@@ -67,7 +67,7 @@ public class Product {
 
     public int getProductID(){ return productID; }
 
-    public int getOrderId(){return orderId;}
+    public int getTableId(){return tableid;}
 
-    public void setOrderId(int orderId){ this.orderId = orderId;}
+    public void setTableId(int tableid){ this.tableid = tableid;}
 }

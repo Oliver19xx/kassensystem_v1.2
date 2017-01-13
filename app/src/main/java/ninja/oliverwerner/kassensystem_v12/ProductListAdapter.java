@@ -1,10 +1,7 @@
 package ninja.oliverwerner.kassensystem_v12;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
@@ -14,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import java.util.HashMap;
@@ -56,7 +52,6 @@ public class ProductListAdapter extends ArrayAdapter<Product> {
             TextView product_name = (TextView) v.findViewById(R.id.product_name);
             TextView product_price = (TextView) v.findViewById(R.id.product_price);
             Button number_Button = (Button) v.findViewById(R.id.number_Button);
-
             if (product_name != null){
                 product_name.setText(item.getName());
             }
@@ -70,36 +65,33 @@ public class ProductListAdapter extends ArrayAdapter<Product> {
             }
             number_Button.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {
-                    if (getItem(position).getOrderId() > 0) {
-                        yes_no_dialog(position);
+                    if (getItem(position).getTableId() > 0) {
                         int productid = getItem(position).getProductID();
                         String name = getItem(position).getName() + "".toString();
                         String sPri = getItem(position).getPrice() + "".toString();
                         String sBez = getItem(position).getNumber() + "".toString();
-                        int orderId = getItem(position).getOrderId();
+                        int tableid = getItem(position).getTableId();
+                        yes_no_dialog(position,tableid, productid);
                         int bez = Integer.parseInt(sBez.toString());
                         double dPri = Double.parseDouble(sPri.toString());
                         if (TableActivity.plus_minus.isChecked()) {
                             if (bez > 1) {
                                 bez--;
                                 remove(getItem(position));
-                                insert(new Product(productid, name, dPri, bez, orderId), position);
+                                insert(new Product(productid, name, dPri, bez, tableid), position);
 
                                 try {
                                     HashMap<String, String> hashMap = new HashMap<>();
                                     hashMap.put("method", "updateOrder");
-                                    hashMap.put("orderID", orderId + "".toString());
+                                    hashMap.put("tableID", tableid + "".toString());
                                     hashMap.put("productID", productid + "".toString());
                                     hashMap.put("mp_operator", "-");
-                                    String jsonString = new ActivityDataSource(hashMap).execute().get();
+                                    new ActivityDataSource(hashMap).execute().get();
 
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
-                                Log.d("DatabaseStatement", "i hope");
-
                             } else {
-                                // TODO: 19.12.2016 Datenbankanbindung erstellen mit dem befehl das das produkt komplett gelöscht wird. Absprache mit Oliver
                                 builder.setMessage("You want to delete " + name);
                                 AlertDialog alert = builder.create();
                                 alert.show();
@@ -107,22 +99,33 @@ public class ProductListAdapter extends ArrayAdapter<Product> {
                         } else {
                             bez++;
                             remove(getItem(position));
-                            insert(new Product(productid, name, dPri, bez, orderId), position);
+                            insert(new Product(productid, name, dPri, bez, tableid), position);
                             try {
                                 HashMap<String, String> hashMap = new HashMap<>();
                                 hashMap.put("method", "updateOrder");
-                                hashMap.put("orderID", orderId + "".toString());
+                                hashMap.put("tableID", tableid + "".toString());
                                 hashMap.put("productID", productid + "".toString());
                                 hashMap.put("mp_operator", "+");
-                                String jsonString = new ActivityDataSource(hashMap).execute().get();
+                                new ActivityDataSource(hashMap).execute().get();
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
                         }
                     }else if(ProductGroupsActivity.table_id != 0){
-                        Snackbar.make(view, "you will put the product on an order " , Snackbar.LENGTH_LONG)
+                        int productid = getItem(position).getProductID();
+                        try {
+                            HashMap<String, String> hashMap = new HashMap<>();
+                            hashMap.put("method", "updateOrder");
+                            hashMap.put("tableID", ProductGroupsActivity.table_id + "".toString());
+                            hashMap.put("productID", productid + "".toString());
+                            hashMap.put("mp_operator", "+");
+                            new ActivityDataSource(hashMap).execute().get();
+                        } catch (Exception e) {
+                            Log.d("testtest",e+"");
+                            e.printStackTrace();
+                        }
+                        Snackbar.make(view, "Produkt hinzugefügt", Snackbar.LENGTH_SHORT)
                                 .setAction("Action", null).show();
-                        // TODO: 29.12.2016 Datenbankabfrage fürs einfügen des Produktes zur order erstellen. Mit Oliver absprechen 
                     }else{
                         Snackbar.make(view, "You will change the product ", Snackbar.LENGTH_LONG)
                                 .setAction("Action", null).show();
@@ -136,7 +139,7 @@ public class ProductListAdapter extends ArrayAdapter<Product> {
         return v;
 
     }
-    public void yes_no_dialog(final int ipos){
+    public void yes_no_dialog(final int ipos, final int tableid, final int productid){
         builder = new AlertDialog.Builder(context);
         builder.setTitle("Title");
         builder.setMessage("You want to delete ");
@@ -145,7 +148,18 @@ public class ProductListAdapter extends ArrayAdapter<Product> {
             @Override
             public void onClick(DialogInterface dialog, int which){
                 remove(getItem(ipos));
-                dialog.dismiss();
+
+                try {
+                    HashMap<String, String> hashMap = new HashMap<>();
+                    hashMap.put("method", "updateOrder");
+                    hashMap.put("tableID", tableid + "".toString());
+                    hashMap.put("productID", productid + "".toString());
+                    hashMap.put("mp_operator", "-");
+                    new ActivityDataSource(hashMap).execute().get();
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
         builder.setNegativeButton("NO", new DialogInterface.OnClickListener(){
