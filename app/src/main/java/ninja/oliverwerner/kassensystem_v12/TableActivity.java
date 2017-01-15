@@ -166,9 +166,9 @@ public class TableActivity extends AppCompatActivity
             JSONObject oneObject = jsonArray.getJSONObject(0);
 
             // Schreibe die Daten in das Table-Objekt
-            table.setTableId(oneObject.getInt("ID"));
-            table.setTableName(oneObject.getString("name"));
-            table.setTableState(oneObject.getInt("state"));
+            table.setTableId(oneObject.getInt("table_id"));
+            table.setTableName(oneObject.getString("table_name"));
+            table.setTableState(oneObject.getInt("table_state"));
 
         }catch (Exception e){
             e.printStackTrace();
