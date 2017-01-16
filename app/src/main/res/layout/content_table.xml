@@ -17,6 +17,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/paymentButton"
         android:gravity="center"
         android:text="@string/pay_button"/>
     <Switch

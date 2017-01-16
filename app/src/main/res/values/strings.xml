@@ -36,4 +36,7 @@
     <!-- essentials -->
     <string name="apply">anwenden</string>
     <string name="title_activity_payment">PaymentActivity</string>
+
+    <!-- payment -->
+    <string name="currency">€</string>
 </resources>

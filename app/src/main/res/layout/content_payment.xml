@@ -14,22 +14,47 @@
     tools:context="ninja.oliverwerner.kassensystem_v12.TableActivity"
     tools:showIn="@layout/app_bar_table">
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="@string/pay_button"/>
-    <Switch
-        android:text="@string/plus_minus"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/plus_minus"
-        android:layout_alignParentTop="true"
-        android:layout_above="@+id/EnterPays_PaysList"
-        android:layout_toRightOf="@+id/EnterPays_addAtomPayment" />
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="59dp">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/pay_Button"
+            android:gravity="center"
+            android:text="@string/pay_button"/>
+        <Switch
+            android:text="@string/plus_minus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/plus_minus_pay"
+            android:layout_alignParentTop="true"
+            android:layout_above="@+id/EnterPays_PaysList"
+            android:layout_toRightOf="@+id/EnterPays_addAtomPayment"
+            android:layout_weight="0.08" />
+
+        <TextView
+            android:text="0,00"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/sum_price"
+            android:textSize="30sp"
+            android:gravity="right"
+            android:layout_weight="1.00" />
+        <TextView
+            android:text="@string/currency"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/currency"
+            android:textSize="30sp"
+            android:gravity="left"
+            android:layout_weight="1.00" />
+    </LinearLayout>
 
     <ListView
-        android:id="@+id/lvOrderedProducts"
+        android:id="@+id/lvPaymentProducts"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"></ListView>
 </LinearLayout>

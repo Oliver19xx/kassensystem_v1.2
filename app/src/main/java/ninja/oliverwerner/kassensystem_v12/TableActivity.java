@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Switch;
 
@@ -31,6 +32,7 @@ public class TableActivity extends AppCompatActivity
     static Switch plus_minus = null;
     private ProductListAdapter adapter = null;
     int tableID = 0;
+    Button payment_button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +46,7 @@ public class TableActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                     Intent intent = new Intent(view.getContext(), ProductGroupsActivity.class);
-                    intent.putExtra("table_id", tableID);
+                    intent.putExtra("table_id", tableID+"".toString());
                     startActivity(intent);
             }
         });
@@ -58,10 +60,20 @@ public class TableActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        payment_button = (Button) findViewById(R.id.paymentButton);
+        payment_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), PaymentActivity.class);
+                intent.putExtra("table_id", tableID+"".toString());
+                startActivity(intent);
+            }
+        });
+
+
         Intent intent = getIntent();
 
         tableID = Integer.parseInt(intent.getStringExtra("tableID"));
-        Log.d("testtest",tableID+"");
 
         // Hole Tisch Tischinformationen
         loadTableInfo(intent.getStringExtra("tableID"));

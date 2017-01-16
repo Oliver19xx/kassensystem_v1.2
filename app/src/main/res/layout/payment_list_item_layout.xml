@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="horizontal" >
+
+    <TextView
+        android:paddingLeft="10dp"
+        android:text="TextView"
+        android:layout_width="193dp"
+        android:layout_height="36dp"
+        android:id="@+id/product_name_pay"
+        android:layout_weight="9.23" />
+
+    <TextView
+        android:text="pr"
+        android:layout_width="33dp"
+        android:paddingLeft="5dp"
+        android:layout_height="37dp"
+        android:id="@+id/product_price_pay"
+        android:layout_weight="6.90" />
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="36dp"
+        android:id="@+id/product_value" />
+
+    <Button
+        android:id="@+id/number_Button_pay"
+        android:layout_height="fill_parent"
+        android:layout_width="44dp"
+        android:layout_weight="1.43" />
+</LinearLayout>

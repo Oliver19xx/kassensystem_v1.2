@@ -13,6 +13,7 @@ public class Product {
     private double price = 0;
     private int tableid = 0;
     private int productGroup = 0;
+    private int value = 0;
 
     public Product(String name, double price, int p_id, int productGroup){
         this.setProductID(p_id);
@@ -21,6 +22,7 @@ public class Product {
         this.setPrice(price);
         this.setProductGroup(productGroup);
         this.setTableId(-1);
+        this.setValue(-1);
     }
     public Product(int productID,String name, double price, int p_id, int tableid){
         this.setProductID(productID);
@@ -29,6 +31,17 @@ public class Product {
         this.setPrice(price);
         this.setTableId(tableid);
         this.setProductGroup(-1);
+        this.setValue(-1);
+    }
+
+    public Product(int productID,String name, double price, int p_id, int tableid, int value ){
+        this.setProductID(productID);
+        this.setName(name);
+        this.setNumber(p_id);
+        this.setPrice(price);
+        this.setTableId(tableid);
+        this.setProductGroup(-1);
+        this.setValue(value);
     }
 
     public String getName() {
@@ -70,4 +83,8 @@ public class Product {
     public int getTableId(){return tableid;}
 
     public void setTableId(int tableid){ this.tableid = tableid;}
+
+    public void setValue(int value){ this.value = value;}
+
+    public int getValue(){return value;}
 }
