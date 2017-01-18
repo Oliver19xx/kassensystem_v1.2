@@ -25,6 +25,9 @@
     <string name="table_state_free">frei</string>
     <string name="title_activity_table">TableActivity</string>
 
+    <!-- add-table -->
+    <string name="add_table">Tisch hinzufügen</string>
+
     <!-- ordered-list-item -->
     <string name="plus_minus">+/-</string>
     <string name="sum_pay_price">0.00</string>
@@ -35,6 +38,8 @@
 
     <!-- essentials -->
     <string name="apply">anwenden</string>
+    <string name="cancel">abbrechen</string>
+    <string name="add">hinzufügen</string>
     <string name="title_activity_payment">PaymentActivity</string>
 
     <!-- payment -->

@@ -1,9 +1,13 @@
 package ninja.oliverwerner.kassensystem_v12;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -14,6 +18,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ListView;
 
@@ -24,6 +29,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+
+import static android.R.id.input;
 
 class TablesSettingsActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -39,8 +47,8 @@ class TablesSettingsActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                addTableDialog();
             }
         });
 
@@ -178,5 +186,45 @@ class TablesSettingsActivity extends AppCompatActivity
         TableSettingsAdapter adapter = new TableSettingsAdapter(this, R.layout.tables_settings_item_layout, tableList);
         Log.d("myMessage","TableGridAdapter => "+adapter.toString());
         lvTableSettings.setAdapter(adapter);
+    }
+    public void addTableDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.add_table);
+
+        final EditText editText = new EditText(this);
+        // TODO: 16.01.2017 placeholder
+        editText.setInputType(InputType.TYPE_CLASS_TEXT);
+        builder.setView(editText);
+
+        // Set up the buttons
+        builder.setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String tableName = editText.getText().toString();
+                Log.d("myMessage","addTable: "+tableName);
+                if(tableName != ""){
+                    try {
+                        HashMap<String, String> hashMap = new HashMap<>();
+                        hashMap.put("method", "addTable");
+                        hashMap.put("tableName", tableName);
+                        new ActivityDataSource(hashMap).execute().get();
+
+                        Intent intent = new Intent(getBaseContext(), TablesActivity.class);
+                        startActivity(intent);
+                    } catch (Exception e) {
+                        Log.d("myMessage","addTableDialog - Exception: "+e.getMessage());
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
     }
 }
