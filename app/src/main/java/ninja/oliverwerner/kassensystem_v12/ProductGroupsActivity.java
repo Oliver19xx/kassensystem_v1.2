@@ -26,6 +26,7 @@ import java.util.HashMap;
 
 public class ProductGroupsActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    static int table_id = 0 ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +53,9 @@ public class ProductGroupsActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        Intent intent = getIntent();
+        table_id = intent.getIntExtra("table_id",0);
+
         loadProductGroups();
     }
 
@@ -68,7 +72,7 @@ public class ProductGroupsActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.product_groups, menu);
+        getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
@@ -149,7 +153,7 @@ public class ProductGroupsActivity extends AppCompatActivity
             String jsonString = new ActivityDataSource(hashMap).execute().get();
 
             // Erstelle aus dem JSON-String ein JSONArray
-            JSONArray jsonArray = new JSONArray(jsonString);
+            JSONArray jsonArray = new JSONObject(jsonString).getJSONArray("data");
 
             for (int i = 0; i < jsonArray.length(); i++) {
                 try {
@@ -159,7 +163,6 @@ public class ProductGroupsActivity extends AppCompatActivity
                     String name = oneObject.getString("p_group_name");
 
                     productGroupsList.add(new ProductGroup(id, name));
-                    Log.d("myMessage", "p_group_id->" + id + " | p_group_name->" + name);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -172,6 +175,6 @@ public class ProductGroupsActivity extends AppCompatActivity
         Log.d("myMessage","tableList.length()="+productGroupsList.size());
         ProductGroupAdapter adapter = new ProductGroupAdapter(this, R.layout.custom_button_layout, productGroupsList);
         Log.d("myMessage","TableGridAdapter => "+adapter);
-        gvTables.setAdapter(adapter); // TODO: 14.12.2016 Hier weitermachen adapter error null
+        gvTables.setAdapter(adapter);
     }
 }

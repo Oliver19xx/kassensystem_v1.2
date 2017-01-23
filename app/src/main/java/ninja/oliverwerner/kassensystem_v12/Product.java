@@ -7,15 +7,43 @@ import java.io.Serializable;
  */
 
 public class Product {
+    private int productID = 0;
     private String name = "";
     private int number = 0;
     private double price = 0;
+    private int tableid = 0;
+    private int productGroup = 0;
+    private int value = 0;
 
-    public Product(String name, double price, int number){
+    public Product(String name, double price, int p_id, int productGroup){
+        this.setProductID(p_id);
         this.setName(name);
-        this.setNumber(number);
+        this.setNumber(p_id);
         this.setPrice(price);
+        this.setProductGroup(productGroup);
+        this.setTableId(-1);
+        this.setValue(-1);
     }
+    public Product(int productID,String name, double price, int p_id, int tableid){
+        this.setProductID(productID);
+        this.setName(name);
+        this.setNumber(p_id);
+        this.setPrice(price);
+        this.setTableId(tableid);
+        this.setProductGroup(-1);
+        this.setValue(-1);
+    }
+
+    public Product(int productID,String name, double price, int p_id, int tableid, int value ){
+        this.setProductID(productID);
+        this.setName(name);
+        this.setNumber(p_id);
+        this.setPrice(price);
+        this.setTableId(tableid);
+        this.setProductGroup(-1);
+        this.setValue(value);
+    }
+
     public String getName() {
         return this.name;
     }
@@ -39,4 +67,24 @@ public class Product {
     public void setNumber(int number) {
         this.number = number;
     }
+
+    public int getProductGroup() {
+        return productGroup;
+    }
+
+    public void setProductGroup(int productGroup) {
+        this.productGroup = productGroup;
+    }
+
+    public void  setProductID(int productID){ this.productID = productID;}
+
+    public int getProductID(){ return productID; }
+
+    public int getTableId(){return tableid;}
+
+    public void setTableId(int tableid){ this.tableid = tableid;}
+
+    public void setValue(int value){ this.value = value;}
+
+    public int getValue(){return value;}
 }

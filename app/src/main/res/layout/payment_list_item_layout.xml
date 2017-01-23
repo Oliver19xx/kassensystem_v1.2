@@ -10,7 +10,7 @@
         android:text="TextView"
         android:layout_width="193dp"
         android:layout_height="36dp"
-        android:id="@+id/product_name"
+        android:id="@+id/product_name_pay"
         android:layout_weight="9.23" />
 
     <TextView
@@ -18,11 +18,17 @@
         android:layout_width="33dp"
         android:paddingLeft="5dp"
         android:layout_height="37dp"
-        android:id="@+id/product_price"
+        android:id="@+id/product_price_pay"
         android:layout_weight="6.90" />
 
+    <TextView
+        android:text="TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="36dp"
+        android:id="@+id/product_value" />
+
     <Button
-        android:id="@+id/number_Button"
+        android:id="@+id/number_Button_pay"
         android:layout_height="fill_parent"
         android:layout_width="44dp"
         android:layout_weight="1.43" />

@@ -1,7 +1,11 @@
 package ninja.oliverwerner.kassensystem_v12;
 
-import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -19,48 +24,155 @@ public class ProductListAdapter extends ArrayAdapter<Product> {
     private List<Product> items;
     private int layoutResourceId;
     private Context context;
+    private View v;
+    public AlertDialog.Builder builder;
+
 
     public ProductListAdapter(Context context, int layoutResourceId, List<Product> items){
         super(context, layoutResourceId,  items);
         this.layoutResourceId = layoutResourceId;
         this.context = context;
         this.items = items;
+
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        View row = convertView;
-        ProductHolder holder = null;
+    public View getView(final int position, View convertView, ViewGroup parent) {
+        v = convertView;
 
-        LayoutInflater inflater = ((Activity) context).getLayoutInflater();
-        row = inflater.inflate(layoutResourceId,parent,false);
+        if(v == null){
+            LayoutInflater vi;
+            vi = LayoutInflater.from(getContext());
+            v = vi.inflate(layoutResourceId, null);
+        }
 
-        holder = new ProductHolder();
-        holder.productList = items.get(position);
-        holder.numberButton = (Button) row.findViewById(R.id.number_Button);
-        holder.numberButton.setTag(holder.productList);
+        Product item = getItem(position);
 
-        holder.name = (TextView)row.findViewById(R.id.product_name);
-        holder.price = (TextView)row.findViewById(R.id.product_price);
+        if (item != null){
+            TextView product_name = (TextView) v.findViewById(R.id.product_name);
+            TextView product_price = (TextView) v.findViewById(R.id.product_price);
+            Button number_Button = (Button) v.findViewById(R.id.number_Button);
+            if (product_name != null){
+                product_name.setText(item.getName());
+            }
 
-        row.setTag(holder);
+            if (product_price != null){
+                product_price.setText(""+item.getPrice());
+            }
 
-        setupItem(holder);
-        return row;
+            if (number_Button != null){
+                number_Button.setText(""+item.getNumber());
+            }
+            number_Button.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View view) {
+                    if (getItem(position).getTableId() > 0) {
+                        int productid = getItem(position).getProductID();
+                        String name = getItem(position).getName() + "".toString();
+                        String sPri = getItem(position).getPrice() + "".toString();
+                        String sBez = getItem(position).getNumber() + "".toString();
+                        int tableid = getItem(position).getTableId();
+                        yes_no_dialog(position,tableid, productid);
+                        int bez = Integer.parseInt(sBez.toString());
+                        double dPri = Double.parseDouble(sPri.toString());
+                        if (TableActivity.plus_minus.isChecked()) {
+                            if (bez > 1) {
+                                bez--;
+                                remove(getItem(position));
+                                insert(new Product(productid, name, dPri, bez, tableid), position);
+
+                                try {
+                                    HashMap<String, String> hashMap = new HashMap<>();
+                                    hashMap.put("method", "updateOrder");
+                                    hashMap.put("tableID", tableid + "".toString());
+                                    hashMap.put("productID", productid + "".toString());
+                                    hashMap.put("mp_operator", "-");
+                                    new ActivityDataSource(hashMap).execute().get();
+
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            } else {
+                                builder.setMessage("You want to delete " + name);
+                                AlertDialog alert = builder.create();
+                                alert.show();
+                            }
+                        } else {
+                            bez++;
+                            remove(getItem(position));
+                            insert(new Product(productid, name, dPri, bez, tableid), position);
+                            try {
+                                HashMap<String, String> hashMap = new HashMap<>();
+                                hashMap.put("method", "updateOrder");
+                                hashMap.put("tableID", tableid + "".toString());
+                                hashMap.put("productID", productid + "".toString());
+                                hashMap.put("mp_operator", "+");
+                                new ActivityDataSource(hashMap).execute().get();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }else if(ProductGroupsActivity.table_id != 0){
+                        int productid = getItem(position).getProductID();
+                        try {
+                            HashMap<String, String> hashMap = new HashMap<>();
+                            hashMap.put("method", "updateOrder");
+                            hashMap.put("tableID", ProductGroupsActivity.table_id + "".toString());
+                            hashMap.put("productID", productid + "".toString());
+                            hashMap.put("mp_operator", "+");
+                            new ActivityDataSource(hashMap).execute().get();
+                        } catch (Exception e) {
+                            Log.d("testtest",e+"");
+                            e.printStackTrace();
+                        }
+                        Snackbar.make(view, "Produkt hinzugefügt", Snackbar.LENGTH_SHORT)
+                                .setAction("Action", null).show();
+                    }else{
+                        Snackbar.make(view, "You will change the product ", Snackbar.LENGTH_LONG)
+                                .setAction("Action", null).show();
+                        // TODO: 29.12.2016 Wenn Produkt geändert wird 
+                    }
+                }
+            });
+        }
+
+
+        return v;
 
     }
+    public void yes_no_dialog(final int ipos, final int tableid, final int productid){
+        builder = new AlertDialog.Builder(context);
+        builder.setTitle("Title");
+        builder.setMessage("You want to delete ");
 
-    private void setupItem(ProductHolder holder){
-        holder.name.setText(holder.productList.getName());
-        holder.price.setText(String.valueOf(holder.productList.getPrice())+"€");
-        holder.numberButton.setText(String.valueOf(holder.productList.getNumber()));
+        builder.setPositiveButton("YES", new DialogInterface.OnClickListener(){
+            @Override
+            public void onClick(DialogInterface dialog, int which){
+                remove(getItem(ipos));
+
+                try {
+                    HashMap<String, String> hashMap = new HashMap<>();
+                    hashMap.put("method", "updateOrder");
+                    hashMap.put("tableID", tableid + "".toString());
+                    hashMap.put("productID", productid + "".toString());
+                    hashMap.put("mp_operator", "-");
+                    new ActivityDataSource(hashMap).execute().get();
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        builder.setNegativeButton("NO", new DialogInterface.OnClickListener(){
+            @Override
+            public void onClick(DialogInterface dialog, int which){
+                dialog.dismiss();
+            }
+        });
     }
 
-    public static class ProductHolder{
-        Product productList;
-        TextView name;
-        TextView price;
-        Button numberButton;
-
+    @Nullable
+    @Override
+    public Product getItem(int position) {
+        return super.getItem(position);
     }
 }

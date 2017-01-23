@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/content_table"
+    android:id="@+id/content_products"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -11,26 +11,10 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="ninja.oliverwerner.kassensystem_v12.TableActivity"
-    tools:showIn="@layout/app_bar_table">
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/paymentButton"
-        android:gravity="center"
-        android:text="@string/pay_button"/>
-    <Switch
-        android:text="@string/plus_minus"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/plus_minus"
-        android:layout_alignParentTop="true"
-        android:layout_above="@+id/EnterPays_PaysList"
-        android:layout_toRightOf="@+id/EnterPays_addAtomPayment" />
-
+    tools:context="ninja.oliverwerner.kassensystem_v12.ProductsActivity"
+    tools:showIn="@layout/app_bar_products">
     <ListView
-        android:id="@+id/lvOrderedProducts"
+        android:id="@+id/lvProducts"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"></ListView>
 </LinearLayout>

@@ -32,6 +32,18 @@
         <activity
             android:name=".ProductGroupsActivity"
             android:label="@string/title_activity_product_groups"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ProductsActivity"
+            android:label="@string/title_activity_products"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".TablesSettingsActivity"
+            android:label="@string/title_activity_tables_settings"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".PaymentActivity"
+            android:label="@string/title_activity_payment"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

@@ -17,27 +17,26 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Switch;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
-public class TableActivity extends AppCompatActivity
+public class PaymentActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
-    private Table table = new Table();
     static Switch plus_minus = null;
-    private ProductListAdapter adapter = null;
+    private PaymentListAdapter adapter = null;
     int tableID = 0;
     Button payment_button;
+    static TextView sum_Price;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_table);
+        setContentView(R.layout.activity_payment);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -45,9 +44,8 @@ public class TableActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                    Intent intent = new Intent(view.getContext(), ProductGroupsActivity.class);
-                    intent.putExtra("table_id", tableID+"".toString());
-                    startActivity(intent);
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
             }
         });
 
@@ -60,26 +58,42 @@ public class TableActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        payment_button = (Button) findViewById(R.id.paymentButton);
+        payment_button = (Button) findViewById(R.id.pay_Button);
         payment_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), PaymentActivity.class);
-                intent.putExtra("table_id", tableID+"".toString());
-                startActivity(intent);
+                int i = adapter.getCount();
+                for(int iGr = 0; iGr < i; iGr++){
+                    int productid = adapter.getItem(iGr).getProductID();
+                    String name = adapter.getItem(iGr).getName() + "".toString();
+                    String sPri = adapter.getItem(iGr).getPrice() + "".toString();
+                    String sBez = adapter.getItem(iGr).getNumber() + "".toString();
+                    int tableid = adapter.getItem(iGr).getTableId();
+                    int value = adapter.getItem(iGr).getValue();
+                    int orderValue = Integer.parseInt(sBez.toString());
+                    double dPri = Double.parseDouble(sPri.toString());
+                    int new_anz = orderValue - value;
+                    if(new_anz > 0 ) {
+                        adapter.remove(adapter.getItem(iGr));
+                        adapter.insert(new Product(productid, name, dPri, new_anz, tableid,0), iGr);
+                    }else{
+                        adapter.remove(adapter.getItem(iGr));
+                        i--;
+                        iGr--;
+                    }
+                }
+                sum_Price.setText("0.00");
             }
         });
-
-
+        sum_Price = (TextView) findViewById(R.id.sum_price);
+        sum_Price.setText("0.00");
         Intent intent = getIntent();
+        ;
+      //  tableID = Integer.parseInt(intent.getStringExtra("table_id")+"");
 
-        tableID = Integer.parseInt(intent.getStringExtra("tableID"));
-
-        // Hole Tisch Tischinformationen
-        loadTableInfo(intent.getStringExtra("tableID"));
 
         // Lade Liste Bestellter Produkte
-        loadOrderedList(intent.getStringExtra("tableID"));
+        loadOrderedList(intent.getStringExtra("table_id"));
     }
 
     @Override
@@ -165,68 +179,11 @@ public class TableActivity extends AppCompatActivity
         return true;
     }
 
-    public void loadTableInfo(String tableID){
-        try {
-            // HashMap erstellen und Daten für die DB-Abfrage im Inneren speichern
-            HashMap<String, String> hashMap = new HashMap<>();
-            hashMap.put("method", "getTable");
-            hashMap.put("tableID", tableID);
-
-            // Hole mir den Rückgabe-String und speicher ihn in einer Variable ab
-            String jsonString = new ActivityDataSource(hashMap).execute().get();
-            Log.d("myMessage","Table-jsonString = "+jsonString);
-
-            // Erstelle aus dem JSON-String ein JSONArray
-            JSONArray jsonArray = new JSONObject(jsonString).getJSONArray("data");
-            JSONObject oneObject = jsonArray.getJSONObject(0);
-
-            // Schreibe die Daten in das Table-Objekt
-            table.setTableId(oneObject.getInt("table_id"));
-            table.setTableName(oneObject.getString("table_name"));
-            table.setTableState(oneObject.getInt("table_state"));
-
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        
-        String state="";
-        // TODO: 11.12.2016 string aus resourcen ziehen
-        switch (table.getTableState()){
-            case 0:
-                state = "frei";
-                break;
-            case 1:
-                state = "reserviert";
-                break;
-            case 2:
-                state = "besetzt";
-                break;
-            default:
-        }
-
-        StringBuilder titel = new StringBuilder();
-        titel.append("ID: "+table.getTableId());
-        titel.append(" ");
-        titel.append("Name: "+table.getTableName());
-        titel.append(" ");
-        titel.append("Status: "+state);
-        setTitle(titel.toString());
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        loadOrderedList(tableID+"");
-    }
-
-
-
     public void loadOrderedList(String tableID){
-        plus_minus = (Switch) findViewById(R.id.plus_minus);
-        ListView listView = (ListView) findViewById(R.id.lvOrderedProducts);
-        adapter = new ProductListAdapter(this, R.layout.product_list_item_layout, new ArrayList<Product>());
+        plus_minus = (Switch) findViewById(R.id.plus_minus_pay);
+        ListView listView = (ListView) findViewById(R.id.lvPaymentProducts);
+        adapter = new PaymentListAdapter(this, R.layout.payment_list_item_layout, new ArrayList<Product>());
         listView.setAdapter(adapter);
-
         try {
             // HashMap erstellen und Daten für die DB-Abfrage im Inneren speichern
             HashMap<String, String> hashMap = new HashMap<>();
@@ -262,7 +219,8 @@ public class TableActivity extends AppCompatActivity
                                 oneObject.getString("product_name"),
                                 oneObject.getDouble("product_price"),
                                 oneObject.getInt("product_count") - oneObject.getInt("product_paid"),
-                                this.tableID), 0);
+                                this.tableID,
+                                0), 0);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
