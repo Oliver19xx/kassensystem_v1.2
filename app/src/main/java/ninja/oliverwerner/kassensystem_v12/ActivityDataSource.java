@@ -14,7 +14,7 @@ import java.net.URLEncoder;
 import java.util.HashMap;
 
 public class ActivityDataSource extends AsyncTask<String, Void, String> {
-
+// test
     // TODO: 02.12.2016 Azhentifikations-Schlüssel generieren, in der Datenbank speichern und in der strings.xml hinterlegen
 
     public static final String POST_PARAM_KEYVALUE_SEPARATOR = "=";
