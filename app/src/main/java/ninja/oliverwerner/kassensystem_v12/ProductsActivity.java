@@ -1,9 +1,12 @@
 package ninja.oliverwerner.kassensystem_v12;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -14,7 +17,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import org.json.JSONArray;
@@ -27,6 +32,8 @@ import java.util.HashMap;
 public class ProductsActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    String prgrp_id;
+    String prgrp_name;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,8 +45,7 @@ public class ProductsActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                addProductDialog();
             }
         });
 
@@ -53,7 +59,7 @@ public class ProductsActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         Intent intent = getIntent();
-
+        prgrp_id = intent.getStringExtra("pGroupID");
         loadProducts(intent.getStringExtra("pGroupID"));
     }
 
@@ -160,6 +166,7 @@ public class ProductsActivity extends AppCompatActivity
                     JSONObject oneObject = jsonArray.getJSONObject(i);
 
                     setTitle(oneObject.getString("p_group_name"));
+                    prgrp_name = (oneObject.getString("p_group_name"));
 
 
 
@@ -189,5 +196,55 @@ public class ProductsActivity extends AppCompatActivity
         Log.d("myMessage","tableList.length()="+productsList.size());
         ProductListAdapter adapter = new ProductListAdapter(this, R.layout.product_list_item_layout, productsList); // TODO: 15.12.2016 Adapter testen
         lvProducts.setAdapter(adapter);
+    }
+    public void addProductDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.add_product);
+        LinearLayout layout = new LinearLayout(this);
+        layout.setOrientation(LinearLayout.VERTICAL);
+
+        final EditText editName = new EditText(this);
+        final EditText editprice = new EditText(this);
+
+        editName.setInputType(InputType.TYPE_CLASS_TEXT);
+        editprice.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
+        editName.setHint("Produktname");
+        editprice.setHint("Preis");
+        layout.addView(editName);
+        layout.addView(editprice);
+        builder.setView(layout);
+
+        // Set up the buttons
+        builder.setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String prName = editName.getText().toString();
+                String prPrice = editprice.getText().toString();
+                if(prName != "" && prPrice != ""){
+                    try {
+                        HashMap<String, String> hashMap = new HashMap<>();
+                        hashMap.put("method", "addProduct");
+                        hashMap.put("productName", prName );
+                        hashMap.put("productPrice", prPrice);
+                        hashMap.put("productGroup", prgrp_name);
+                        new ActivityDataSource(hashMap).execute().get();
+                        //tewstsdvqwef
+
+                        loadProducts(prgrp_id);
+                    } catch (Exception e) {
+                        Log.d("myMessage","addTableDialog - Exception: "+e.getMessage());
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
     }
 }

@@ -28,6 +28,9 @@
     <!-- add-table -->
     <string name="add_table">Tisch hinzufügen</string>
 
+    <!-- add-product -->
+    <string name="add_product">Produkt hinzufügen</string>
+
     <!-- ordered-list-item -->
     <string name="plus_minus">+/-</string>
     <string name="sum_pay_price">0.00</string>
