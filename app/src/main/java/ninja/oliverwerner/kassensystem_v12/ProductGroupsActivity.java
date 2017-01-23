@@ -1,9 +1,12 @@
 package ninja.oliverwerner.kassensystem_v12;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -14,7 +17,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 
 import org.json.JSONArray;
@@ -27,7 +32,6 @@ import java.util.HashMap;
 public class ProductGroupsActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     static int table_id = 0 ;
-    int test = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,8 +44,7 @@ public class ProductGroupsActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                addProduct();
             }
         });
 
@@ -177,5 +180,60 @@ public class ProductGroupsActivity extends AppCompatActivity
         ProductGroupAdapter adapter = new ProductGroupAdapter(this, R.layout.custom_button_layout, productGroupsList);
         Log.d("myMessage","TableGridAdapter => "+adapter);
         gvTables.setAdapter(adapter);
+    }
+    public void addProduct(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.add_product);
+        LinearLayout layout = new LinearLayout(this);
+        layout.setOrientation(LinearLayout.VERTICAL);
+
+        final EditText editGroup = new EditText(this);
+        final EditText editName = new EditText(this);
+        final EditText editprice = new EditText(this);
+
+        editGroup.setInputType(InputType.TYPE_CLASS_TEXT);
+        editName.setInputType(InputType.TYPE_CLASS_TEXT);
+        editprice.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
+        editGroup.setHint("Produktgruppe");
+        editName.setHint("Produktname");
+        editprice.setHint("Preis");
+        layout.addView(editGroup);
+        layout.addView(editName);
+        layout.addView(editprice);
+        builder.setView(layout);
+
+        // Set up the buttons
+        builder.setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String prGroup = editGroup.getText().toString();
+                String prName = editName.getText().toString();
+                String prPrice = editprice.getText().toString();
+                Log.d("myMessage","addTable: "+prGroup+" " +prName + " " + prPrice);
+                if(prGroup != "" && prName != "" && prPrice != ""){
+                    try {
+                        HashMap<String, String> hashMap = new HashMap<>();
+                        hashMap.put("method", "addProduct");
+                        hashMap.put("productName", prName );
+                        hashMap.put("productPrice", prPrice);
+                        hashMap.put("productGroup", prGroup);
+                        new ActivityDataSource(hashMap).execute().get();
+
+                        loadProductGroups();
+                    } catch (Exception e) {
+                        Log.d("myMessage","addTableDialog - Exception: "+e.getMessage());
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
     }
 }

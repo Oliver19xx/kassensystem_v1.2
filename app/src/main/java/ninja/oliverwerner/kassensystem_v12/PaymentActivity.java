@@ -20,7 +20,9 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONStringer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -63,6 +65,8 @@ public class PaymentActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 int i = adapter.getCount();
+                JSONArray dataArray = new JSONArray();
+                int first = 0;
                 for(int iGr = 0; iGr < i; iGr++){
                     int productid = adapter.getItem(iGr).getProductID();
                     String name = adapter.getItem(iGr).getName() + "".toString();
@@ -73,23 +77,44 @@ public class PaymentActivity extends AppCompatActivity
                     int orderValue = Integer.parseInt(sBez.toString());
                     double dPri = Double.parseDouble(sPri.toString());
                     int new_anz = orderValue - value;
-                    if(new_anz > 0 ) {
-                        adapter.remove(adapter.getItem(iGr));
-                        adapter.insert(new Product(productid, name, dPri, new_anz, tableid,0), iGr);
-                    }else{
-                        adapter.remove(adapter.getItem(iGr));
-                        i--;
-                        iGr--;
+                    if(value > 0) {
+                        try {
+                            JSONObject data = new JSONObject();
+                            data.put("product", productid);
+                            data.put("pr_value", value);
+                            dataArray.put(data);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        if (new_anz > 0) {
+                            adapter.remove(adapter.getItem(iGr));
+                            adapter.insert(new Product(productid, name, dPri, new_anz, tableid, 0), iGr);
+                        } else {
+                            adapter.remove(adapter.getItem(iGr));
+                            i--;
+                            iGr--;
+                        }
                     }
                 }
+                Log.d("arraytest",dataArray.toString());
                 sum_Price.setText("0.00");
+                //TODO Absprache mit Oliver wie der Array übergeben werden muss
+                try {
+                    HashMap<String, String> hashMap = new HashMap<>();
+                    hashMap.put("method", "updateOrder");
+                    hashMap.put("table_id", tableID+"".toString());
+                    hashMap.put("paid_products", dataArray.toString());
+                    new ActivityDataSource(hashMap).execute().get();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
         sum_Price = (TextView) findViewById(R.id.sum_price);
         sum_Price.setText("0.00");
         Intent intent = getIntent();
-        ;
-      //  tableID = Integer.parseInt(intent.getStringExtra("table_id")+"");
+        tableID = Integer.parseInt(intent.getStringExtra("table_id"));
 
 
         // Lade Liste Bestellter Produkte
