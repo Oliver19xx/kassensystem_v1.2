@@ -16,6 +16,7 @@ import android.widget.Button;
 import java.util.ArrayList;
 
 public class TableGridAdapter extends BaseAdapter {
+    // test commit
     // TODO: 29.12.2016 Items werden beim hin und her scrollen nicht korekt wieder aufgebaut
     private Context context = null;
     private int resource = 0;
