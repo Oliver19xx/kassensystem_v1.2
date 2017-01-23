@@ -228,6 +228,7 @@ public class ProductsActivity extends AppCompatActivity
                         hashMap.put("productPrice", prPrice);
                         hashMap.put("productGroup", prgrp_name);
                         new ActivityDataSource(hashMap).execute().get();
+                        //tewst
 
                         loadProducts(prgrp_id);
                     } catch (Exception e) {
