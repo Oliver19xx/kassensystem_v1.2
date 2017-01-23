@@ -27,6 +27,7 @@ import java.util.HashMap;
 public class ProductGroupsActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     static int table_id = 0 ;
+    int test = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
