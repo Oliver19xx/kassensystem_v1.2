@@ -80,8 +80,8 @@ public class PaymentActivity extends AppCompatActivity
                     if(value > 0) {
                         try {
                             JSONObject data = new JSONObject();
-                            data.put("product", productid);
-                            data.put("pr_value", value);
+                            data.put("pid", productid);
+                            data.put("paycount", value);
                             dataArray.put(data);
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -102,7 +102,7 @@ public class PaymentActivity extends AppCompatActivity
                 //TODO Absprache mit Oliver wie der Array übergeben werden muss
                 try {
                     HashMap<String, String> hashMap = new HashMap<>();
-                    hashMap.put("method", "updateOrder");
+                    hashMap.put("method", "payOrder");
                     hashMap.put("table_id", tableID+"".toString());
                     hashMap.put("paid_products", dataArray.toString());
                     new ActivityDataSource(hashMap).execute().get();
