@@ -46,7 +46,7 @@ public class TableActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                     Intent intent = new Intent(view.getContext(), ProductGroupsActivity.class);
-                    intent.putExtra("table_id", tableID+"".toString());
+                    intent.putExtra("table_id", tableID);
                     startActivity(intent);
             }
         });
