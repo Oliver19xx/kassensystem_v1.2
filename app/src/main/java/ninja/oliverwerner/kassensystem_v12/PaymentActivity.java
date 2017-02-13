@@ -1,5 +1,7 @@
 package ninja.oliverwerner.kassensystem_v12;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -105,7 +107,24 @@ public class PaymentActivity extends AppCompatActivity
                     hashMap.put("method", "payOrder");
                     hashMap.put("table_id", tableID+"".toString());
                     hashMap.put("paid_products", dataArray.toString());
-                    new ActivityDataSource(hashMap).execute().get();
+
+                    // Hole mir den Rückgabe-String und speicher ihn in einer Variable ab
+                    String jsonString = new ActivityDataSource(hashMap).execute().get();
+                    Log.d("arraytest", jsonString+"");
+
+                    // Erstelle aus dem JSON-String ein JSONArray
+                    JSONObject oneObject = new JSONObject(jsonString).getJSONObject("data");
+
+
+
+                    StringBuilder stringBuilder = new StringBuilder();
+                    stringBuilder.append(oneObject.getString("bon_code"));
+
+
+                    String bonid =  oneObject.getString("bon_code");
+                    showBon(bonid);
+
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -217,7 +236,8 @@ public class PaymentActivity extends AppCompatActivity
 
             // Hole mir den Rückgabe-String und speicher ihn in einer Variable ab
             String jsonString = new ActivityDataSource(hashMap).execute().get();
-            Log.d("myMessage","Table-jsonString = "+jsonString);
+            Log.d("arraytest", jsonString+"");
+
 
             // Erstelle aus dem JSON-String ein JSONArray
             JSONArray jsonArray = new JSONObject(jsonString).getJSONArray("data");
@@ -255,5 +275,27 @@ public class PaymentActivity extends AppCompatActivity
         }catch (Exception e){
             e.printStackTrace();
         }
+    }
+    public void showBon(String bon_id){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Bon");
+
+        final TextView bonID = new TextView(this);
+        bonID.setTextSize(22);
+
+
+        bonID.setText("  " + bon_id);
+        builder.setView(bonID);
+
+        // Set up the buttons
+
+        builder.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
     }
 }

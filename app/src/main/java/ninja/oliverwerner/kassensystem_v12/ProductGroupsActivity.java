@@ -181,7 +181,7 @@ public class ProductGroupsActivity extends AppCompatActivity
         Log.d("myMessage","TableGridAdapter => "+adapter);
         gvTables.setAdapter(adapter);
     }
-    public void addProduct(){
+    public void addProduct() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.add_product);
         LinearLayout layout = new LinearLayout(this);
@@ -209,19 +209,17 @@ public class ProductGroupsActivity extends AppCompatActivity
                 String prGroup = editGroup.getText().toString();
                 String prName = editName.getText().toString();
                 String prPrice = editprice.getText().toString();
-                Log.d("myMessage","addTable: "+prGroup+" " +prName + " " + prPrice);
-                if(prGroup != "" && prName != "" && prPrice != ""){
+                if (prGroup != "" && prName != "" && prPrice != "") {
                     try {
                         HashMap<String, String> hashMap = new HashMap<>();
                         hashMap.put("method", "addProduct");
-                        hashMap.put("productName", prName );
+                        hashMap.put("productName", prName);
                         hashMap.put("productPrice", prPrice);
                         hashMap.put("productGroup", prGroup);
                         new ActivityDataSource(hashMap).execute().get();
 
                         loadProductGroups();
                     } catch (Exception e) {
-                        Log.d("myMessage","addTableDialog - Exception: "+e.getMessage());
                         e.printStackTrace();
                     }
                 }
