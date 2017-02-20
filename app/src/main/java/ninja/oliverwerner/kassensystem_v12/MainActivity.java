@@ -14,17 +14,23 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.GridView;
+import android.widget.Button;
+import android.widget.TextView;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.GregorianCalendar;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    Button table_button;
+    Button product_button;
+    Button setting_button;
+    TextView year_value;
+    TextView year_price;
+    TextView month_value;
+    TextView month_price;
+    TextView day_value;
+    TextView day_price;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +38,46 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        table_button = (Button) findViewById(R.id.main_table);
+        table_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), TablesActivity.class);
+                startActivity(intent);
+            }
+        });
+        product_button = (Button) findViewById(R.id.main_product);
+        product_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), ProductGroupsActivity.class);
+                startActivity(intent);
+            }
+        });
+        setting_button = (Button) findViewById(R.id.main_settings);
+        setting_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Intent intent = new intent(v.getContext(), .class)
+                //startActivity(intent);
+            }
+        });
+
+        year_value  = (TextView) findViewById(R.id.year_value);
+        year_price  = (TextView) findViewById(R.id.year_price);
+        month_value = (TextView) findViewById(R.id.month_value);
+        month_price = (TextView) findViewById(R.id.month_price);
+        day_value   = (TextView) findViewById(R.id.day_value);
+        day_price   = (TextView) findViewById(R.id.day_price);
+
+        int year = new GregorianCalendar().get(GregorianCalendar.YEAR);
+        int month = new GregorianCalendar().get(GregorianCalendar.MONTH)+1;
+        int day = new GregorianCalendar().get(GregorianCalendar.DATE);
+        Log.d("testtest",month+"");
+        year_value.setText(year+"");
+        month_value.setText(month+"");
+        day_value.setText(day+"");
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {

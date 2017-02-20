@@ -5,12 +5,15 @@ import android.content.DialogInterface;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.HashMap;
@@ -129,7 +132,12 @@ public class ProductListAdapter extends ArrayAdapter<Product> {
                     }else{
                         Snackbar.make(view, "You will change the product ", Snackbar.LENGTH_LONG)
                                 .setAction("Action", null).show();
-                        // TODO: 29.12.2016 Wenn Produkt geändert wird 
+                        int productid = getItem(position).getProductID();
+                        String name = getItem(position).getName() + "".toString();
+                        String sPri = getItem(position).getPrice() + "".toString();
+                        String sBez = getItem(position).getNumber() + "".toString();
+                        Log.d("testtest", productid + " " + name + " " + sPri + " " + position);
+                        changeProduct(productid, name, sPri);
                     }
                 }
             });
@@ -168,6 +176,54 @@ public class ProductListAdapter extends ArrayAdapter<Product> {
                 dialog.dismiss();
             }
         });
+    }
+
+    public void changeProduct(final int pr_id, final String name , final String price){
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(context);
+        builder.setTitle(R.string.change_product);
+        LinearLayout layout = new LinearLayout(context);
+        layout.setOrientation(LinearLayout.VERTICAL);
+
+        final EditText editName = new EditText(context);
+        final EditText editprice = new EditText(context);
+
+        editName.setInputType(InputType.TYPE_CLASS_TEXT);
+        editprice.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
+        editName.setHint(name);
+        editprice.setHint(price);
+        layout.addView(editName);
+        layout.addView(editprice);
+        builder.setView(layout);
+
+        // Set up the buttons
+        builder.setPositiveButton(R.string.save_product, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String prName = editName.getText().toString()+"";
+                String prPrice = editprice.getText().toString()+"";
+                if(prName != "" || prPrice != ""){
+                    if (prName == ""){ prName = name;}
+                    if (prPrice == ""){ prPrice = price;}
+                    Log.d("testtest", "änderen " + prName+ " " + prPrice );
+                }
+            }
+        });
+        builder.setNeutralButton(R.string.delete_product, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Log.d("testtest", "delete " + pr_id );
+                dialog.cancel();
+            }
+        });
+
+        builder.setNegativeButton(R.string.abort_product, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
     }
 
     @Nullable

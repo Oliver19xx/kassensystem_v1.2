@@ -278,7 +278,7 @@ public class PaymentActivity extends AppCompatActivity
     }
     public void showBon(String bon_id){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Bon");
+        builder.setTitle(R.string.bon);
 
         final TextView bonID = new TextView(this);
         bonID.setTextSize(22);
@@ -289,7 +289,7 @@ public class PaymentActivity extends AppCompatActivity
 
         // Set up the buttons
 
-        builder.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+        builder.setNeutralButton(R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();

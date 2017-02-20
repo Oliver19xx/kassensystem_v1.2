@@ -12,4 +12,158 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="ninja.oliverwerner.kassensystem_v12.MainActivity"
     tools:showIn="@layout/app_bar_main">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:text="@string/main_table"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/main_table"
+                android:layout_weight="1" />
+
+            <Button
+                android:text="@string/main_product"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/main_product"
+                android:layout_weight="1" />
+
+            <Button
+                android:text="@string/main_settings"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/main_settings"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:weightSum="1">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="50dp">
+
+                <TextView
+                    android:layout_width="21dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/emty_text"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:text="@string/main_value"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/headline_value"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:text="@string/main_price"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/headline_price"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="50dp">
+
+                <TextView
+                    android:text="@string/day"
+                    android:layout_width="21dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/day_text"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:text="TextView"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/day_value"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:text="TextView"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/day_price"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:id="@+id/LinearLayout">
+
+                <TextView
+                    android:text="@string/month"
+                    android:layout_width="21dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/month_text"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:text="TextView"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/month_value"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:text="TextView"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/month_price"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="50dp">
+
+                <TextView
+                    android:text="@string/year"
+                    android:layout_width="21dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/year_text"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:text="TextView"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/year_value"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:text="TextView"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/year_price"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
 </RelativeLayout>

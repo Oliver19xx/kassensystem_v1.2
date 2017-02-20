@@ -31,6 +31,16 @@
     <!-- add-table -->
     <string name="add_product">Produkt hinzufügen</string>
 
+    <!-- change-table -->
+    <string name="change_product">Produkt ändern</string>
+    <string name="save_product">Sichern</string>
+    <string name="delete_product">Löschen</string>
+    <string name="abort_product">Abbruch</string>
+
+    <!-- bon -->
+    <string name="bon">Bon</string>
+    <string name="ok">OK</string>
+
     <!-- ordered-list-item -->
     <string name="plus_minus">+/-</string>
     <string name="sum_pay_price">0.00</string>
@@ -47,4 +57,14 @@
 
     <!-- payment -->
     <string name="currency">€</string>
+
+    <!-- main_activity -->
+    <string name="main_value">Bestellt</string>
+    <string name="main_price">Erlös</string>
+    <string name="year">Jahr</string>
+    <string name="month">Monat</string>
+    <string name="day">Tag</string>
+    <string name="main_settings">Einstellung</string>
+    <string name="main_table">Tische</string>
+    <string name="main_product">Produkte</string>
 </resources>
