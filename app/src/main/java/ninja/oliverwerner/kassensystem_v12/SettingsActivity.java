@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
-import android.view.MenuInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -15,40 +14,47 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.GridView;
+import android.widget.Button;
+import android.widget.EditText;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+public class SettingsActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener {
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
-public class TablesActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+    EditText name_edit;
+    EditText colour_edit;
+    Button name_button;
+    Button colour_button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tables);
+        setContentView(R.layout.activity_settings);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        name_edit = (EditText) findViewById(R.id.shop_edit);
+        colour_edit = (EditText) findViewById(R.id.colour_edit);
+        name_button = (Button) findViewById(R.id.shop_save);
+        //name_button.setOnClickListener();
+        colour_button = (Button) findViewById(R.id.colour_save);
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
+        drawer.setDrawerListener(toggle);
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
-        loadTables();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        loadTables();
     }
 
     @Override
@@ -63,8 +69,8 @@ public class TablesActivity extends AppCompatActivity implements NavigationView.
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main, menu);
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
@@ -75,14 +81,9 @@ public class TablesActivity extends AppCompatActivity implements NavigationView.
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        switch (id){
-            case R.id.action_settings:
-                Log.d("myMessage","action_settings");
-                Intent intent = new Intent(this,TablesSettingsActivity.class);
-                startActivity(intent);
-                break;
-            default:
-                return true;
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -110,8 +111,8 @@ public class TablesActivity extends AppCompatActivity implements NavigationView.
             case R.id.nav_products: {
                 Log.d("myMessage","nav_products");
                 Intent intent = new Intent(this,ProductGroupsActivity.class);
+                intent.putExtra("orderId","");
                 startActivity(intent);
-                setTitle("Produkte");
                 break;
             }
             case R.id.nav_settings: {
@@ -137,46 +138,4 @@ public class TablesActivity extends AppCompatActivity implements NavigationView.
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
-    private void loadTables() {
-        ArrayList<Table> tableList = new ArrayList<Table>();
-
-        try {
-            // HashMap erstellen und Daten für die DB-Abfrage im Inneren speichern
-            HashMap<String, String> hashMap = new HashMap<>();
-            hashMap.put("method", "getActivTables");
-
-            // Hole mir den Rückgabe-String und speicher ihn in einer Variable ab
-            String jsonString = new ActivityDataSource(hashMap).execute().get();
-
-            // Erstelle aus dem JSON-String ein JSONArray
-            JSONArray jsonArray = new JSONObject(jsonString).getJSONArray("data");
-
-            for (int i = 0; i < jsonArray.length(); i++) {
-                try {
-                    // TODO: 19.12.2016 Abfrage von "return_type" (jsonArray['return_type'])
-                    // Hole aus dem JSONArray ein JSONObjekt und speicher die Daten in Variablen
-                    JSONObject oneObject = jsonArray.getJSONObject(i);
-                    int id = oneObject.getInt("table_id");
-                    String name = oneObject.getString("table_name");
-                    int state = oneObject.getInt("table_state");
-
-                    // Füge die Daten aus dem JSONObjekt in die Erstellung eines neuen Tisches ein und hänge diesen an die Liste an
-                    tableList.add(new Table(id, name, state));
-//                    Log.d("myMessage", "ID->" + id + " | name->" + name + " | status->" + status);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        GridView gvTables = (GridView) findViewById(R.id.gvTables);
-        Log.d("myMessage","tableList.length()="+tableList.size());
-        TableGridAdapter adapter = new TableGridAdapter(this, R.layout.custom_button_layout, tableList);
-        Log.d("myMessage","TableGridAdapter => "+adapter.toString());
-        gvTables.setAdapter(adapter);
-    }
-
 }

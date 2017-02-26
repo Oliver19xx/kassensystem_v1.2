@@ -162,6 +162,70 @@
                     android:layout_weight="1" />
             </LinearLayout>
 
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="48dp">
+
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberSigned"
+                    android:ems="10"
+                    android:id="@+id/edit_year"
+                    android:layout_weight="1"
+                    android:hint="Year"
+                    android:maxLength="4"/>
+
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:ems="10"
+                    android:id="@+id/edit_month"
+                    android:layout_weight="1"
+                    android:hint="Month"
+                    android:maxLength="2"/>
+
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:ems="10"
+                    android:id="@+id/edit_day"
+                    android:layout_weight="1"
+                    android:hint="Day"
+                    android:maxLength="2"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="54dp">
+
+                <Button
+                    android:text="Button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/calculate_button"
+                    android:layout_weight="0.40" />
+
+                <TextView
+                    android:text="order"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/date_value"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:text="receipts"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/date_price"
+                    android:layout_weight="1" />
+
+            </LinearLayout>
+
         </LinearLayout>
 
     </LinearLayout>
