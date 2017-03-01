@@ -33,7 +33,7 @@ import java.util.concurrent.ExecutionException;
 
 import static android.R.id.input;
 
-class TablesSettingsActivity extends AppCompatActivity
+public class TablesSettingsActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     @Override

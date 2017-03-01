@@ -155,7 +155,6 @@ public class TablesActivity extends AppCompatActivity implements NavigationView.
 
             for (int i = 0; i < jsonArray.length(); i++) {
                 try {
-                    // TODO: 19.12.2016 Abfrage von "return_type" (jsonArray['return_type'])
                     // Hole aus dem JSONArray ein JSONObjekt und speicher die Daten in Variablen
                     JSONObject oneObject = jsonArray.getJSONObject(i);
                     int id = oneObject.getInt("table_id");

@@ -67,4 +67,20 @@
     <string name="main_settings">Einstellung</string>
     <string name="main_table">Tische</string>
     <string name="main_product">Produkte</string>
+    <string name="title_activity_login">Sign in</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_server">Server</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Passwort (optional)</string>
+    <string name="action_sign_in">Login</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">E-Mail-Adresse ungültig</string>
+    <string name="error_invalid_password">Passwort zu kurz</string>
+    <string name="error_incorrect_password">Passwort falsch</string>
+    <string name="error_field_required">Pflichtfeld</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+    <string name="save_email">Email-Adresse speichern?</string>
 </resources>
