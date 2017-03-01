@@ -83,4 +83,5 @@
         completions."
     </string>
     <string name="save_email">Email-Adresse speichern?</string>
+    <string name="title_activity_settings">SettingsActivity</string>
 </resources>

@@ -122,9 +122,8 @@ public class ProductGroupsActivity extends AppCompatActivity
             }
             case R.id.nav_settings: {
                 Log.d("myMessage","nav_settings");
-//                Intent intent = new Intent(this,MainActivity.class);
-//                startActivity(intent);
-                setTitle("Einstellungen");
+                Intent intent = new Intent(this,SettingsActivity.class);
+                startActivity(intent);
                 break;
             }
             case R.id.nav_logout: {

@@ -17,7 +17,12 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.TextView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -59,8 +64,8 @@ public class MainActivity extends AppCompatActivity
         setting_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Intent intent = new intent(v.getContext(), .class)
-                //startActivity(intent);
+                Intent intent = new Intent(v.getContext(),SettingsActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -74,10 +79,95 @@ public class MainActivity extends AppCompatActivity
         int year = new GregorianCalendar().get(GregorianCalendar.YEAR);
         int month = new GregorianCalendar().get(GregorianCalendar.MONTH)+1;
         int day = new GregorianCalendar().get(GregorianCalendar.DATE);
-        Log.d("testtest",month+"");
-        year_value.setText(year+"");
-        month_value.setText(month+"");
-        day_value.setText(day+"");
+
+        // day average
+        try {
+            // HashMap erstellen und Daten für die DB-Abfrage im Inneren speichern
+            HashMap<String, String> hashMap = new HashMap<>();
+            hashMap.put("method", "getStatistics");
+            hashMap.put("day",day+"");
+            hashMap.put("month",month+"");
+            hashMap.put("year",year+"");
+            Log.d("dbtest","1");
+
+            // Hole mir den Rückgabe-String und speicher ihn in einer Variable ab
+            String jsonString = new ActivityDataSource(hashMap).execute().get();
+            Log.d("dbtest","2"+ jsonString);
+            // Erstelle aus dem JSON-String ein JSONArray
+            JSONArray jsonArray = new JSONObject(jsonString).getJSONArray("data");
+            Log.d("dbtest","3");
+            // Hole aus dem JSONArray ein JSONObjekt und speicher die Daten in Variablen
+            JSONObject oneObject = jsonArray.getJSONObject(0);
+            String value ;
+            String price;
+            value = oneObject.getString("ordered_products");
+            if(value.equalsIgnoreCase("")) value = "0";
+            price = oneObject.getString("volume_of_sale");
+            if(price.equalsIgnoreCase("")) price = "0";
+            Log.d("dbtest","4");
+            day_value.setText(value);
+            day_price.setText(price);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        // Month average
+        try {
+            // HashMap erstellen und Daten für die DB-Abfrage im Inneren speichern
+            HashMap<String, String> hashMap = new HashMap<>();
+            hashMap.put("method", "getStatistics");
+            hashMap.put("day","");
+            hashMap.put("month",month+"");
+            hashMap.put("year",year+"");
+
+            // Hole mir den Rückgabe-String und speicher ihn in einer Variable ab
+            String jsonString = new ActivityDataSource(hashMap).execute().get();
+
+            // Erstelle aus dem JSON-String ein JSONArray
+            JSONArray jsonArray = new JSONObject(jsonString).getJSONArray("data");
+
+            // Hole aus dem JSONArray ein JSONObjekt und speicher die Daten in Variablen
+            JSONObject oneObject = jsonArray.getJSONObject(0);
+            String value ;
+            String price;
+            value = oneObject.getString("ordered_products");
+            if(value.equalsIgnoreCase("")) value = "0";
+            price = oneObject.getString("volume_of_sale");
+            if(price.equalsIgnoreCase("")) price = "0";
+
+            month_value.setText(value);
+            month_price.setText(price);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        // year avg
+        try {
+            // HashMap erstellen und Daten für die DB-Abfrage im Inneren speichern
+            HashMap<String, String> hashMap = new HashMap<>();
+            hashMap.put("method", "getStatistics");
+            hashMap.put("day","");
+            hashMap.put("month","");
+            hashMap.put("year",year+"");
+
+            // Hole mir den Rückgabe-String und speicher ihn in einer Variable ab
+            String jsonString = new ActivityDataSource(hashMap).execute().get();
+
+            // Erstelle aus dem JSON-String ein JSONArray
+            JSONArray jsonArray = new JSONObject(jsonString).getJSONArray("data");
+
+            // Hole aus dem JSONArray ein JSONObjekt und speicher die Daten in Variablen
+            JSONObject oneObject = jsonArray.getJSONObject(0);
+            String value ;
+            String price;
+            value = oneObject.getString("ordered_products");
+            if(value.equalsIgnoreCase("")) value = "0";
+            price = oneObject.getString("volume_of_sale");
+            if(price.equalsIgnoreCase("")) price = "0";
+
+            year_value.setText(value);
+            year_price.setText(price);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -159,9 +249,8 @@ public class MainActivity extends AppCompatActivity
             }
             case R.id.nav_settings: {
                 Log.d("myMessage","nav_settings");
-//                Intent intent = new Intent(this,MainActivity.class);
-//                startActivity(intent);
-                setTitle("Einstellungen");
+                Intent intent = new Intent(this,SettingsActivity.class);
+                startActivity(intent);
                 break;
             }
             case R.id.nav_logout: {
