@@ -21,61 +21,50 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:weightSum="1">
+        <Button
+            android:id="@+id/btn_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/save"/>
 
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="55dp">
+            android:layout_height="wrap_content">
 
             <TextView
-                android:text="Geschäftsname"
-                android:layout_height="wrap_content"
                 android:id="@+id/shop_name"
-                android:layout_weight="1"
-                android:layout_width="50dp" />
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="@string/store_name"
+                android:layout_weight="1" />
 
             <EditText
+                android:id="@+id/et_shop_name"
                 android:layout_height="wrap_content"
-                android:inputType="textPersonName"
-                android:ems="10"
-                android:id="@+id/shop_edit"
-                android:layout_width="150dp" />
-
-            <Button
-                android:text="save"
-                android:layout_height="wrap_content"
-                android:id="@+id/shop_save"
-                android:layout_weight="0.30"
-                android:layout_width="50dp" />
+                android:layout_width="wrap_content"
+                android:layout_weight="1"/>
 
         </LinearLayout>
 
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:layout_weight="0.02">
 
             <TextView
-                android:text="Theme-Colour"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:id="@+id/colour_name"
-                android:layout_weight="0.58" />
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="@string/theme_color"
+                android:layout_weight="1" />
 
             <EditText
+                android:id="@+id/et_theme_color"
                 android:layout_height="wrap_content"
-                android:inputType="textPersonName"
-                android:ems="10"
-                android:id="@+id/colour_edit"
-                android:layout_width="150dp" />
-
-            <Button
-                android:text="Save"
-                android:layout_height="wrap_content"
-                android:id="@+id/colour_save"
-                android:layout_width="50dp"
-                android:layout_weight="0.32" />
+                android:layout_width="wrap_content"
+                android:layout_weight="1" />
         </LinearLayout>
     </LinearLayout>
 </RelativeLayout>

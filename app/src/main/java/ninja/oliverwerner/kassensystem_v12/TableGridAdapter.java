@@ -31,7 +31,6 @@ public class TableGridAdapter extends BaseAdapter {
     @NonNull
     @Override
     public View getView(final int position, final View convertView, ViewGroup parent) {
-        Log.d("myMessage", "TableGridAdapter - getView()");
 
         View v;
         Button button;

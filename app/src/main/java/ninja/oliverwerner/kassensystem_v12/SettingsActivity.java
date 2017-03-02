@@ -1,6 +1,7 @@
 package ninja.oliverwerner.kassensystem_v12;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -20,10 +21,20 @@ import android.widget.EditText;
 public class SettingsActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    EditText name_edit;
-    EditText colour_edit;
-    Button name_button;
-    Button colour_button;
+    // Festgelegte Feldname für die Speicherplätze in der Datei
+    private static final String SHOP_NAME = "SHOP_NAME";
+    private static final String THEME_COLOR = "THEME_COLOR";
+
+    // Dateiname unter dem die Informationen gespeichert werden
+    private static final String FILENAME = "KS_SETTINGS";
+
+    // Tool zum Speichern und Lesen der Informationen in einer Datei
+    SharedPreferences sharedPrefs;
+
+    // Felder aus dem Activity-Layout
+    EditText etShopName;
+    EditText etThemeColor;
+    Button btnSave;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,11 +43,30 @@ public class SettingsActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        name_edit = (EditText) findViewById(R.id.shop_edit);
-        colour_edit = (EditText) findViewById(R.id.colour_edit);
-        name_button = (Button) findViewById(R.id.shop_save);
-        //name_button.setOnClickListener();
-        colour_button = (Button) findViewById(R.id.colour_save);
+        // Views des Layouts in Variablen laden
+        etShopName = (EditText) findViewById(R.id.et_shop_name);
+        etThemeColor = (EditText) findViewById(R.id.et_theme_color);
+        btnSave = (Button) findViewById(R.id.btn_save);
+
+        // Beim Klick auf Speichern ...
+        btnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Hole den aktuellen Text aus den Textfeldern und löschen Leerzeichen vom Anfang und Ende
+                String shopName = etShopName.getText().toString().trim();
+                String themeColor = etThemeColor.getText().toString().trim();
+
+                // Stellt die Datei zum Schreiben bereit
+                SharedPreferences sharedPrefs = getSharedPreferences(FILENAME, 0);
+
+                // Es wird ein "Bearbeiter" für die Datei erstellt
+                SharedPreferences.Editor editor = sharedPrefs.edit();
+
+                // Schreibe in die Datei an Feld x String y und speicher die Datei ab
+                editor.putString(SHOP_NAME, shopName).commit();
+                editor.putString(THEME_COLOR, themeColor).commit();
+            }
+        });
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -55,6 +85,17 @@ public class SettingsActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        // Lade die Datei zum Lesen
+        sharedPrefs = getSharedPreferences(FILENAME, 0);
+
+        // Trage den Text aus den Speicherplätzen in die Textfelder ein
+        etShopName.setText(sharedPrefs.getString(SHOP_NAME,null));
+        etThemeColor.setText(sharedPrefs.getString(THEME_COLOR,null));
     }
 
     @Override

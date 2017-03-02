@@ -15,7 +15,6 @@
     <string name="nav_logout">Logout</string>
 
     <!-- store-information-->
-    <string name="store_name">Woods Super Dooper Shop</string>
     <string name="auth_key">test321</string>
     <!--todo auth_key in ActivityDataSource.java einbauen-->
 
@@ -76,6 +75,7 @@
     <string name="action_sign_in">Login</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="error_invalid_email">E-Mail-Adresse ungültig</string>
+    <string name="error_invalid_login">Login ungültig!</string>
     <string name="error_invalid_password">Passwort zu kurz</string>
     <string name="error_incorrect_password">Passwort falsch</string>
     <string name="error_field_required">Pflichtfeld</string>
@@ -84,4 +84,10 @@
     </string>
     <string name="save_email">Email-Adresse speichern?</string>
     <string name="title_activity_settings">SettingsActivity</string>
+
+    <!-- main_activity -->
+    <string name="save">speichern</string>
+    <string name="theme_color">Primärfarbe</string>
+    <string name="store_name">Geschäftsname</string>
+
 </resources>
