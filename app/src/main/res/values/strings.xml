@@ -85,9 +85,10 @@
     <string name="save_email">Email-Adresse speichern?</string>
     <string name="title_activity_settings">SettingsActivity</string>
 
-    <!-- main_activity -->
+    <!-- Settings -->
     <string name="save">speichern</string>
     <string name="theme_color">Primärfarbe</string>
     <string name="store_name">Geschäftsname</string>
+    <string name="color_dialog_title">Farbauswahl</string>
 
 </resources>

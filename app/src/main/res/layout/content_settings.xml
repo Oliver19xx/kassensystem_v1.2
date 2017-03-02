@@ -14,57 +14,95 @@
     tools:showIn="@layout/app_bar_settings">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:orientation="vertical"
         android:weightSum="1">
+
         <Button
             android:id="@+id/btn_save"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/save"/>
+            android:text="@string/save" />
 
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/shop_name"
-                android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:text="@string/store_name"
-                android:layout_weight="1" />
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/store_name" />
 
             <EditText
                 android:id="@+id/et_shop_name"
-                android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
 
         </LinearLayout>
 
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.02">
+            android:layout_weight="0.02"
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/colour_name"
-                android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:text="@string/theme_color"
-                android:layout_weight="1" />
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/theme_color" />
 
-            <EditText
+            <Button
                 android:id="@+id/et_theme_color"
-                android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_weight="1" />
+        </LinearLayout>
+        <View
+            android:id="@+id/color_screen"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:orientation="vertical">
+            <Button
+                android:id="@+id/btn_dialog"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="open dialog sample"
+                />
+            <Button
+                android:id="@+id/btn_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="open view sample"
+                />
+            <Button
+                android:id="@+id/btn_prefs"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="open preference sample"
+                />
+            <Button
+                android:id="@+id/btn_fragment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="open fragment sample"
+                />
         </LinearLayout>
     </LinearLayout>
 </RelativeLayout>
