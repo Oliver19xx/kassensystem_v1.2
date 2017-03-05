@@ -20,7 +20,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.flask.colorpicker.ColorPickerView;
@@ -28,8 +27,6 @@ import com.flask.colorpicker.OnColorChangedListener;
 import com.flask.colorpicker.OnColorSelectedListener;
 import com.flask.colorpicker.builder.ColorPickerClickListener;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
-
-import java.util.Set;
 
 public class SettingsActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -67,7 +64,7 @@ public class SettingsActivity extends AppCompatActivity
 
         // Views des Layouts in Variablen laden
         etShopName = (EditText) findViewById(R.id.et_shop_name);
-        btThemeColor = (Button) findViewById(R.id.et_theme_color);
+        btThemeColor = (Button) findViewById(R.id.bt_theme_color);
         btnSave = (Button) findViewById(R.id.btn_save);
 
         root = findViewById(R.id.color_screen);
@@ -133,7 +130,7 @@ public class SettingsActivity extends AppCompatActivity
                                        public void onClick(View view) {
                                            // Hole den aktuellen Text aus den Textfeldern und löschen Leerzeichen vom Anfang und Ende
                                            String shopName = etShopName.getText().toString().trim();
-                                           String themeColor = btThemeColor.getText().toString().trim();
+//                                           String themeColor = btThemeColor.getText().toString().trim();
 
                                            // Stellt die Datei zum Schreiben bereit
                                            SharedPreferences sharedPrefs = getSharedPreferences(FILENAME, 0);
@@ -143,7 +140,7 @@ public class SettingsActivity extends AppCompatActivity
 
                                            // Schreibe in die Datei an Feld x String y und speicher die Datei ab
                                            editor.putString(SHOP_NAME, shopName).commit();
-                                           editor.putString(THEME_COLOR, themeColor).commit();
+//                                           editor.putString(THEME_COLOR, themeColor).commit();
                                        }
                                    }
 
@@ -175,6 +172,10 @@ public class SettingsActivity extends AppCompatActivity
     private void changeBackgroundColor(int selectedColor) {
         currentBackgroundColor = selectedColor;
         root.setBackgroundColor(selectedColor);
+
+        SharedPreferences sharedPrefs = getSharedPreferences(FILENAME, 0);
+        SharedPreferences.Editor editor = sharedPrefs.edit();
+        editor.putString(THEME_COLOR, ""+currentBackgroundColor).commit();
     }
 
     private void toast(String text) {
@@ -189,7 +190,7 @@ public class SettingsActivity extends AppCompatActivity
 
         // Trage den Text aus den Speicherplätzen in die Textfelder ein
         etShopName.setText(sharedPrefs.getString(SHOP_NAME, null));
-        btThemeColor.setText(sharedPrefs.getString(THEME_COLOR, null));
+        currentBackgroundColor = Integer.parseInt(sharedPrefs.getString(THEME_COLOR, null));
     }
 
     @Override

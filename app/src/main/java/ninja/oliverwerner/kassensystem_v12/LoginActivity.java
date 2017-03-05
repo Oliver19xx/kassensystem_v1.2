@@ -3,10 +3,12 @@ package ninja.oliverwerner.kassensystem_v12;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.preference.PreferenceManager;
 import android.support.annotation.BoolRes;
 import android.support.annotation.NonNull;
@@ -30,6 +32,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -48,6 +51,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static android.Manifest.permission.READ_CONTACTS;
+import static ninja.oliverwerner.kassensystem_v12.R.styleable.CoordinatorLayout;
 
 /**
  * A login screen that offers login via email/password.
@@ -69,8 +73,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
-    private UserLoginTask mAuthTask = null;
     private final Context CONTEXT = this;
+    private Snackbar snackbar;
+    private KeyboardController keyboardController;
 
     // UI references.
     private AutoCompleteTextView mEmailView;
@@ -99,22 +104,22 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         super.onCreate(savedInstanceState);
 
         //todo Short-Cut erstellen (läuft noch nicht)
-        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        isAppInstalled = sharedPrefs.getBoolean("isAppInstalled", false);
-        if (isAppInstalled == false) {
-            Intent shortcutIntent = new Intent(getApplicationContext(), LoginActivity.class);
-            shortcutIntent.setAction(Intent.ACTION_MAIN);
-            Intent intent = new Intent();
-            intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
-            intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, "KS v1.2");
-            intent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, Intent.ShortcutIconResource.fromContext(getApplicationContext(), R.mipmap.ic_launcher));
-            intent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
-            getApplicationContext().sendBroadcast(intent);
-            SharedPreferences.Editor editor = sharedPrefs.edit();
-            editor.putBoolean("isAppInstalled", true);
-            editor.commit();
-
-        }
+//        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+//        isAppInstalled = sharedPrefs.getBoolean("isAppInstalled", false);
+//        if (isAppInstalled == false) {
+//            Intent shortcutIntent = new Intent(getApplicationContext(), LoginActivity.class);
+//            shortcutIntent.setAction(Intent.ACTION_MAIN);
+//            Intent intent = new Intent();
+//            intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
+//            intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, "KS v1.2");
+//            intent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, Intent.ShortcutIconResource.fromContext(getApplicationContext(), R.mipmap.ic_launcher));
+//            intent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
+//            getApplicationContext().sendBroadcast(intent);
+//            SharedPreferences.Editor editor = sharedPrefs.edit();
+//            editor.putBoolean("isAppInstalled", true);
+//            editor.commit();
+//
+//        }
         sharedPrefs = getSharedPreferences(FILENAME, 0);
 
         setContentView(R.layout.activity_login);
@@ -144,6 +149,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
+        keyboardController = new KeyboardController(LoginActivity.this);
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
     }
@@ -256,9 +262,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * errors are presented and no actual login attempt is made.
      */
     private void attemptLogin() {
-        if (mAuthTask != null) {
-            return;
-        }
+        // Focus von dem Textfeld nehmen
+        keyboardController.hideKeyboard();
 
         // Reset errors.
         mServerView.setError(null);
@@ -306,8 +311,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-//            mAuthTask = new UserLoginTask(email, password, server);
-//            mAuthTask.execute();
             loginRequest();
         }
     }
@@ -324,13 +327,25 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     Log.d("return_message", return_message);
                     if (return_message.equals("success")){
                         Log.d("Login:", "login_success");
+                        Snackbar.make(findViewById(android.R.id.content), "Login erfolgreich!", Snackbar.LENGTH_INDEFINITE)
+                                .setDuration(8000)
+                                .show();
                         Intent intent = new Intent(CONTEXT,MainActivity.class);
                         startActivity(intent);
                     } else {
-                        Log.d("Login:", "login_failed");
+                        OnClickListener mOnClickListener = new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                keyboardController.showKeyboard(mPasswordView);
+                            }
+                        };
                         showProgress(false);
-                        mEmailView.setError(getString(R.string.error_invalid_login));
-                        mEmailView.requestFocus();
+                        mPasswordView.setText("");
+                        Snackbar.make(findViewById(android.R.id.content), "Login-Daten prüfen!", Snackbar.LENGTH_INDEFINITE)
+                                .setDuration(8000)
+                                .setAction("OK", mOnClickListener)
+                                .setActionTextColor(Color.GREEN)
+                                .show();
                     }
                 } catch (JSONException e) {
                     e.getStackTrace();
@@ -441,83 +456,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         int ADDRESS = 0;
         int IS_PRIMARY = 1;
-    }
-
-    /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
-     */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
-
-        private final String mServer;
-        private final String mEmail;
-        private final String mPassword;
-        private Boolean requestState;
-        private Response.Listener<String> responseListener;
-
-        UserLoginTask(String email, String password, String server) {
-            mServer = server;
-            mEmail = email;
-            mPassword = password;
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
-
-            Response.Listener<String> responseListener = new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    try {
-                        Log.d("Rückgabe", response);
-                        JSONObject jsonResponse = new JSONObject(response);
-                        JSONObject jsonObject = jsonResponse.getJSONObject("data");
-                        String return_message = jsonObject.getString("return_message");
-                        Log.d("return_message", return_message);
-                    } catch (JSONException e) {
-                        e.getStackTrace();
-                    }
-                }
-
-            };
-            LoginRequest loginRequest = new LoginRequest(mEmail, mPassword, mServer, responseListener);
-            RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
-            requestQueue.add(loginRequest);
-
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
-            }
-
-            // TODO: register the new account here.
-            return true;
-        }
-
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            mAuthTask = null;
-            showProgress(false);
-
-            Log.d("onPostExecute", success.toString());
-
-            if (success) {
-                finish();
-            } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
-            }
-        }
-
-
-        @Override
-        protected void onCancelled() {
-            Log.d("onCancelled", "");
-            mAuthTask = null;
-            showProgress(false);
-        }
     }
 }
 

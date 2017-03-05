@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity
     TextView month_price;
     TextView day_value;
     TextView day_price;
+    KeyboardController keyboardController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -269,5 +270,12 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        keyboardController = new KeyboardController(MainActivity.this);
+        keyboardController.hideKeyboard();
     }
 }
