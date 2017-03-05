@@ -15,6 +15,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -30,12 +31,18 @@ public class MainActivity extends AppCompatActivity
     Button table_button;
     Button product_button;
     Button setting_button;
+    Button calculate_button;
     TextView year_value;
     TextView year_price;
     TextView month_value;
     TextView month_price;
     TextView day_value;
     TextView day_price;
+    TextView calc_value;
+    TextView calc_price;
+    EditText edit_year;
+    EditText edit_month;
+    EditText edit_day;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +83,13 @@ public class MainActivity extends AppCompatActivity
         day_value   = (TextView) findViewById(R.id.day_value);
         day_price   = (TextView) findViewById(R.id.day_price);
 
+        calc_value = (TextView) findViewById(R.id.date_value);
+        calc_price = (TextView) findViewById(R.id.date_price);
+
+        edit_day = (EditText) findViewById(R.id.edit_day);
+        edit_month = (EditText) findViewById(R.id.edit_month);
+        edit_year = (EditText) findViewById(R.id.edit_year);
+
         int year = new GregorianCalendar().get(GregorianCalendar.YEAR);
         int month = new GregorianCalendar().get(GregorianCalendar.MONTH)+1;
         int day = new GregorianCalendar().get(GregorianCalendar.DATE);
@@ -88,14 +102,13 @@ public class MainActivity extends AppCompatActivity
             hashMap.put("day",day+"");
             hashMap.put("month",month+"");
             hashMap.put("year",year+"");
-            Log.d("dbtest","1");
 
             // Hole mir den Rückgabe-String und speicher ihn in einer Variable ab
             String jsonString = new ActivityDataSource(hashMap).execute().get();
-            Log.d("dbtest","2"+ jsonString);
+
             // Erstelle aus dem JSON-String ein JSONArray
             JSONArray jsonArray = new JSONObject(jsonString).getJSONArray("data");
-            Log.d("dbtest","3");
+
             // Hole aus dem JSONArray ein JSONObjekt und speicher die Daten in Variablen
             JSONObject oneObject = jsonArray.getJSONObject(0);
             String value ;
@@ -104,7 +117,7 @@ public class MainActivity extends AppCompatActivity
             if(value.equalsIgnoreCase("")) value = "0";
             price = oneObject.getString("volume_of_sale");
             if(price.equalsIgnoreCase("")) price = "0";
-            Log.d("dbtest","4");
+
             day_value.setText(value);
             day_price.setText(price);
         } catch (Exception e) {
@@ -168,6 +181,93 @@ public class MainActivity extends AppCompatActivity
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        calculate_button = (Button) findViewById(R.id.calculate_button);
+        calculate_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int iYear = 0;
+                int iMonth = 0;
+                int iDay =  0;
+
+                if(!edit_day.getText().toString().equalsIgnoreCase("")){
+
+                    iDay =  Integer.parseInt(edit_day.getText()+"");
+
+                    if(!edit_month.getText().toString().equalsIgnoreCase("")){
+                        iMonth = Integer.parseInt(edit_month.getText()+"");
+                    }else{
+                        iMonth = new GregorianCalendar().get(GregorianCalendar.MONTH)+1;
+                    }
+
+                    if(!edit_year.getText().toString().equalsIgnoreCase("")){
+                        iYear = Integer.parseInt(edit_year.getText()+"");
+                    }else{
+                        iYear = new GregorianCalendar().get(GregorianCalendar.YEAR);
+                    }
+
+                }else if(!edit_month.getText().toString().equalsIgnoreCase("")){
+
+                    iMonth = Integer.parseInt(edit_month.getText()+"");
+
+                    if(!edit_year.getText().toString().equalsIgnoreCase("")){
+                        iYear = Integer.parseInt(edit_year.getText()+"");
+                    }else{
+                        iYear = new GregorianCalendar().get(GregorianCalendar.YEAR);
+                    }
+
+                }else if (!edit_year.getText().toString().equalsIgnoreCase("")){
+
+                    String sYear = edit_year.getText().toString();
+                    iYear = Integer.parseInt(edit_year.getText().toString());
+
+                }
+
+                if(iYear != 0){
+                    String sDay = "";
+                    String sMonth = "";
+
+                    if (iDay < 32 && iMonth < 13){
+                        if(iDay > 0) {
+                            sDay = iDay+"";
+                        }
+                        if( iMonth > 0){
+                            sMonth = iMonth +"";
+                        }
+                    }
+                    try {
+                        // HashMap erstellen und Daten für die DB-Abfrage im Inneren speichern
+                        HashMap<String, String> hashMap = new HashMap<>();
+                        hashMap.put("method", "getStatistics");
+                        hashMap.put("day",sDay);
+                        hashMap.put("month",sMonth);
+                        hashMap.put("year",iYear+"");
+
+                        // Hole mir den Rückgabe-String und speicher ihn in einer Variable ab
+                        String jsonString = new ActivityDataSource(hashMap).execute().get();
+
+                        // Erstelle aus dem JSON-String ein JSONArray
+                        JSONArray jsonArray = new JSONObject(jsonString).getJSONArray("data");
+
+                        // Hole aus dem JSONArray ein JSONObjekt und speicher die Daten in Variablen
+                        JSONObject oneObject = jsonArray.getJSONObject(0);
+                        String value ;
+                        String price;
+                        value = oneObject.getString("ordered_products");
+                        if(value.equalsIgnoreCase("")) value = "0";
+                        price = oneObject.getString("volume_of_sale");
+                        if(price.equalsIgnoreCase("")) price = "0";
+
+                        calc_value.setText(value);
+                        calc_price.setText(price);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+            }
+        });
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {

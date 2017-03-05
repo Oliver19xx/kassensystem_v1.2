@@ -68,7 +68,6 @@ public class PaymentActivity extends AppCompatActivity
             public void onClick(View v) {
                 int i = adapter.getCount();
                 JSONArray dataArray = new JSONArray();
-                int first = 0;
                 for(int iGr = 0; iGr < i; iGr++){
                     int productid = adapter.getItem(iGr).getProductID();
                     String name = adapter.getItem(iGr).getName() + "".toString();
@@ -79,6 +78,7 @@ public class PaymentActivity extends AppCompatActivity
                     int orderValue = Integer.parseInt(sBez.toString());
                     double dPri = Double.parseDouble(sPri.toString());
                     int new_anz = orderValue - value;
+                    
                     if(value > 0) {
                         try {
                             JSONObject data = new JSONObject();
@@ -99,9 +99,7 @@ public class PaymentActivity extends AppCompatActivity
                         }
                     }
                 }
-                Log.d("arraytest",dataArray.toString());
                 sum_Price.setText("0.00");
-                //TODO Absprache mit Oliver wie der Array übergeben werden muss
                 try {
                     HashMap<String, String> hashMap = new HashMap<>();
                     hashMap.put("method", "payOrder");
@@ -110,20 +108,15 @@ public class PaymentActivity extends AppCompatActivity
 
                     // Hole mir den Rückgabe-String und speicher ihn in einer Variable ab
                     String jsonString = new ActivityDataSource(hashMap).execute().get();
-                    Log.d("arraytest", jsonString+"");
 
                     // Erstelle aus dem JSON-String ein JSONArray
                     JSONObject oneObject = new JSONObject(jsonString).getJSONObject("data");
 
-
-
                     StringBuilder stringBuilder = new StringBuilder();
                     stringBuilder.append(oneObject.getString("bon_code"));
 
-
                     String bonid =  oneObject.getString("bon_code");
                     showBon(bonid);
-
 
                 } catch (Exception e) {
                     e.printStackTrace();
