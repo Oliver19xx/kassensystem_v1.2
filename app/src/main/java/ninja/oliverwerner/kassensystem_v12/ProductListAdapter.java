@@ -55,6 +55,7 @@ public class ProductListAdapter extends ArrayAdapter<Product> {
             TextView product_name = (TextView) v.findViewById(R.id.product_name);
             TextView product_price = (TextView) v.findViewById(R.id.product_price);
             Button number_Button = (Button) v.findViewById(R.id.number_Button);
+
             if (product_name != null){
                 product_name.setText(item.getName());
             }
@@ -64,7 +65,13 @@ public class ProductListAdapter extends ArrayAdapter<Product> {
             }
 
             if (number_Button != null){
-                number_Button.setText(""+item.getNumber());
+                if(getItem(position).getTableId() > 0){
+                    number_Button.setText(""+item.getNumber());
+                }else if (ProductGroupsActivity.table_id != 0) {
+                    number_Button.setBackgroundResource(android.R.drawable.ic_input_add);
+                }else{
+                    number_Button.setBackgroundResource(android.R.drawable.ic_menu_edit);
+                }
             }
             number_Button.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {

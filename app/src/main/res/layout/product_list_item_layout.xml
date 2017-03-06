@@ -25,5 +25,5 @@
         android:id="@+id/number_Button"
         android:layout_height="fill_parent"
         android:layout_width="44dp"
-        android:layout_weight="1.43" />
+        android:layout_weight="0.46" />
 </LinearLayout>

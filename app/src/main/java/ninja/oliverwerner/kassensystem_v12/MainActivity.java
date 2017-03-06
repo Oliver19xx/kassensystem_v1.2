@@ -219,23 +219,23 @@ public class MainActivity extends AppCompatActivity
 
                 }else if (!edit_year.getText().toString().equalsIgnoreCase("")){
 
-                    String sYear = edit_year.getText().toString();
                     iYear = Integer.parseInt(edit_year.getText().toString());
 
                 }
+                calc_value.setText(0);
+                calc_price.setText(0);
 
                 if(iYear != 0){
                     String sDay = "";
                     String sMonth = "";
 
-                    if (iDay < 32 && iMonth < 13){
-                        if(iDay > 0) {
-                            sDay = iDay+"";
-                        }
-                        if( iMonth > 0){
-                            sMonth = iMonth +"";
+                    if( iMonth > 0){
+                        sMonth = iMonth +"";
+                        if(iDay > 0){
+                            sDay = iDay + "";
                         }
                     }
+
                     try {
                         // HashMap erstellen und Daten für die DB-Abfrage im Inneren speichern
                         HashMap<String, String> hashMap = new HashMap<>();
