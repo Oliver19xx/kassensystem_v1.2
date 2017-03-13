@@ -192,7 +192,6 @@ public class MainActivity extends AppCompatActivity
                 int iDay =  0;
 
                 if(!edit_day.getText().toString().equalsIgnoreCase("")){
-
                     iDay =  Integer.parseInt(edit_day.getText()+"");
 
                     if(!edit_month.getText().toString().equalsIgnoreCase("")){
@@ -208,7 +207,6 @@ public class MainActivity extends AppCompatActivity
                     }
 
                 }else if(!edit_month.getText().toString().equalsIgnoreCase("")){
-
                     iMonth = Integer.parseInt(edit_month.getText()+"");
 
                     if(!edit_year.getText().toString().equalsIgnoreCase("")){
@@ -222,13 +220,11 @@ public class MainActivity extends AppCompatActivity
                     iYear = Integer.parseInt(edit_year.getText().toString());
 
                 }
-                calc_value.setText(0);
-                calc_price.setText(0);
-
+                calc_value.setText(0+"");
+                calc_price.setText(0+"");
                 if(iYear != 0){
                     String sDay = "";
                     String sMonth = "";
-
                     if( iMonth > 0){
                         sMonth = iMonth +"";
                         if(iDay > 0){

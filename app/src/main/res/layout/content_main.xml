@@ -204,11 +204,11 @@
                 android:layout_height="54dp">
 
                 <Button
-                    android:text="Button"
+                    android:id="@+id/calculate_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/calculate_button"
-                    android:layout_weight="0.40" />
+                    android:layout_weight="0.16"
+                    android:text="@string/analyse_button" />
 
                 <TextView
                     android:text="order"

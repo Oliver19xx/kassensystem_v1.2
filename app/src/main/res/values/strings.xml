@@ -67,6 +67,7 @@
     <string name="main_table">Tische</string>
     <string name="main_product">Produkte</string>
     <string name="title_activity_login">Sign in</string>
+    <string name="analyse_button">Auswerten</string>
 
     <!-- Strings related to login -->
     <string name="prompt_server">Server</string>

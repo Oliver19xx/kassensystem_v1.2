@@ -103,39 +103,39 @@ public class TablesSettingsActivity extends AppCompatActivity
 
         switch (id) {
             case R.id.nav_dashboard: {
-                Log.d("myMessage","nav_dashboard");
-                Intent intent = new Intent(this,MainActivity.class);
+                Log.d("myMessage", "nav_dashboard");
+                Intent intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
                 break;
             }
             case R.id.nav_tables: {
-                Log.d("myMessage","nav_tables");
-                Intent intent = new Intent(this,TablesActivity.class);
+                Log.d("myMessage", "nav_tables");
+                Intent intent = new Intent(this, TablesActivity.class);
                 startActivity(intent);
                 break;
             }
             case R.id.nav_products: {
-                Log.d("myMessage","nav_products");
-                Intent intent = new Intent(this,ProductGroupsActivity.class);
+                Log.d("myMessage", "nav_products");
+                Intent intent = new Intent(this, ProductGroupsActivity.class);
                 startActivity(intent);
                 setTitle("Produkte");
                 break;
             }
             case R.id.nav_settings: {
-                Log.d("myMessage","nav_settings");
-                Intent intent = new Intent(this,SettingsActivity.class);
+                Log.d("myMessage", "nav_settings");
+                Intent intent = new Intent(this, SettingsActivity.class);
                 startActivity(intent);
                 break;
             }
             case R.id.nav_logout: {
-                Log.d("myMessage","nav_logout");
+                Log.d("myMessage", "nav_logout");
 //                Intent intent = new Intent(this,MainActivity.class);
 //                startActivity(intent);
                 setTitle("Logout");
                 break;
             }
             default: {
-                Log.d("myMessage","nav_default");
+                Log.d("myMessage", "nav_default");
 
             }
         }
@@ -145,7 +145,7 @@ public class TablesSettingsActivity extends AppCompatActivity
         return true;
     }
 
-    public void loadTableSettings(){
+    public void loadTableSettings() {
         ArrayList<Table> tableList = new ArrayList<Table>();
 
         try {
@@ -180,12 +180,12 @@ public class TablesSettingsActivity extends AppCompatActivity
         }
 
         ListView lvTableSettings = (ListView) findViewById(R.id.lvTableSettings);
-        Log.d("myMessage","tableList.length()="+tableList.size());
+        Log.d("myMessage", "tableList.length()=" + tableList.size());
         TableSettingsAdapter adapter = new TableSettingsAdapter(this, R.layout.tables_settings_item_layout, tableList);
-        Log.d("myMessage","TableGridAdapter => "+adapter.toString());
+        Log.d("myMessage", "TableGridAdapter => " + adapter.toString());
         lvTableSettings.setAdapter(adapter);
     }
-    public void addTableDialog(){
+    public void addTableDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.add_table);
 
@@ -199,8 +199,8 @@ public class TablesSettingsActivity extends AppCompatActivity
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String tableName = editText.getText().toString();
-                Log.d("myMessage","addTable: "+tableName);
-                if(tableName != ""){
+                Log.d("myMessage", "addTable: " + tableName);
+                if (tableName != "") {
                     try {
                         HashMap<String, String> hashMap = new HashMap<>();
                         hashMap.put("method", "addTable");
@@ -210,7 +210,7 @@ public class TablesSettingsActivity extends AppCompatActivity
                         Intent intent = new Intent(getBaseContext(), TablesActivity.class);
                         startActivity(intent);
                     } catch (Exception e) {
-                        Log.d("myMessage","addTableDialog - Exception: "+e.getMessage());
+                        Log.d("myMessage", "addTableDialog - Exception: " + e.getMessage());
                         e.printStackTrace();
                     }
                 }
