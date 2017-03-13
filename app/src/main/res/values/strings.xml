@@ -17,7 +17,6 @@
 
     <!-- store-information-->
     <string name="auth_key">test321</string>
-    <!--todo auth_key in ActivityDataSource.java einbauen-->
 
     <!-- table-overview-legend -->
     <string name="table_state_taken">besetzt</string>
@@ -67,8 +66,10 @@
     <string name="main_settings">Einstellung</string>
     <string name="main_table">Tische</string>
     <string name="main_product">Produkte</string>
+
     <string name="title_activity_login">Login</string>
     <string name="title_activity_dashboard">Übersicht</string>
+    <string name="analyse_button">Auswerten</string>
 
     <!-- Strings related to login -->
     <string name="prompt_server">Server</string>
