@@ -16,6 +16,8 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.List;
 
@@ -142,9 +144,9 @@ public class ProductListAdapter extends ArrayAdapter<Product> {
                         int productid = getItem(position).getProductID();
                         String name = getItem(position).getName() + "".toString();
                         String sPri = getItem(position).getPrice() + "".toString();
-                        String sBez = getItem(position).getNumber() + "".toString();
+                        int sGroup = getItem(position).getProductGroup();
                         Log.d("testtest", productid + " " + name + " " + sPri + " " + position);
-                        changeProduct(productid, name, sPri);
+                        changeProduct(productid, name, sPri, position, sGroup);
                     }
                 }
             });
@@ -185,7 +187,7 @@ public class ProductListAdapter extends ArrayAdapter<Product> {
         });
     }
 
-    public void changeProduct(final int pr_id, final String name , final String price){
+    public void changeProduct(final int pr_id, final String name , final String price, final int pos, final int pgroup){
         android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(context);
         builder.setTitle(R.string.change_product);
         LinearLayout layout = new LinearLayout(context);
@@ -208,9 +210,31 @@ public class ProductListAdapter extends ArrayAdapter<Product> {
             public void onClick(DialogInterface dialog, int which) {
                 String prName = editName.getText().toString()+"";
                 String prPrice = editprice.getText().toString()+"";
-                if(prName != "" || prPrice != ""){
-                    if (prName == ""){ prName = name;}
-                    if (prPrice == ""){ prPrice = price;}
+                if(!prName.equalsIgnoreCase("") || !prPrice.equalsIgnoreCase("")){
+                    if (prName.equalsIgnoreCase("")){ prName = name;}
+                    if (prPrice.equalsIgnoreCase("")){ prPrice = price;}
+                    try {
+                        HashMap<String, String> hashMap = new HashMap<>();
+                        hashMap.put("method", "editProduct");
+                        hashMap.put("productID", pr_id+"".toString());
+                        hashMap.put("productName", prName+"".toString());
+                        hashMap.put("productPrice", prPrice+"".toString());
+
+                        // Hole mir den Rückgabe-String und speicher ihn in einer Variable ab
+                        String jsonString = new ActivityDataSource(hashMap).execute().get();
+                        JSONObject oneObject = new JSONObject(jsonString).getJSONObject("data");
+
+                        StringBuilder stringBuilder = new StringBuilder();
+                        stringBuilder.append(oneObject.getInt("product_id"));
+
+                        int productid =  oneObject.getInt("product_id");
+                        remove(getItem(pos));
+                        insert(new Product(prName,Double.parseDouble(prPrice),productid,pgroup), pos);
+//<3
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
                     Log.d("testtest", "änderen " + prName+ " " + prPrice );
                 }
             }
@@ -219,6 +243,18 @@ public class ProductListAdapter extends ArrayAdapter<Product> {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Log.d("testtest", "delete " + pr_id );
+                try {
+                    HashMap<String, String> hashMap = new HashMap<>();
+                    hashMap.put("method", "removeProduct");
+                    hashMap.put("productID", pr_id+"".toString());
+
+                    // Hole mir den Rückgabe-String und speicher ihn in einer Variable ab
+                    String jsonString = new ActivityDataSource(hashMap).execute().get();
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                remove(getItem(pos));
                 dialog.cancel();
             }
         });
