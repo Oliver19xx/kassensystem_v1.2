@@ -13,6 +13,7 @@
     <string name="nav_products">Produkte</string>
     <string name="nav_settings">Einstellungen</string>
     <string name="nav_logout">Logout</string>
+    <string name="please_login">Bitte einloggen</string>
 
     <!-- store-information-->
     <string name="auth_key">test321</string>
@@ -44,7 +45,7 @@
     <string name="plus_minus">+/-</string>
     <string name="sum_pay_price">0.00</string>
     <string name="pay_button">Bezahlen</string>
-    <string name="title_activity_product_groups">ProductGroupsActivity</string>
+    <string name="title_activity_product_groups">Produktgruppen</string>
     <string name="title_activity_products">ProductsActivity</string>
     <string name="title_activity_tables_settings">TablesSettingsActivity</string>
 
@@ -66,7 +67,8 @@
     <string name="main_settings">Einstellung</string>
     <string name="main_table">Tische</string>
     <string name="main_product">Produkte</string>
-    <string name="title_activity_login">Sign in</string>
+    <string name="title_activity_login">Login</string>
+    <string name="title_activity_dashboard">Übersicht</string>
 
     <!-- Strings related to login -->
     <string name="prompt_server">Server</string>
@@ -83,7 +85,7 @@
         completions."
     </string>
     <string name="save_email">Email-Adresse speichern?</string>
-    <string name="title_activity_settings">SettingsActivity</string>
+    <string name="title_activity_settings">Einstellungen</string>
 
     <!-- Settings -->
     <string name="save">speichern</string>

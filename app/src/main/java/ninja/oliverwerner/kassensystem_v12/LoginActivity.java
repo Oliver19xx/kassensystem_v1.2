@@ -364,7 +364,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
 
     private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
         return password.length() > 4;
     }
 
@@ -456,6 +455,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         int ADDRESS = 0;
         int IS_PRIMARY = 1;
+    }
+
+    @Override
+    public void onBackPressed() {
+        Snackbar.make(mEmailView, R.string.please_login, Snackbar.LENGTH_INDEFINITE);
     }
 }
 

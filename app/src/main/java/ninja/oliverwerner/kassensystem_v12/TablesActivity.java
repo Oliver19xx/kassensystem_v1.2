@@ -91,45 +91,43 @@ public class TablesActivity extends AppCompatActivity implements NavigationView.
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
+        // TODO: 12.12.2016 Diese Funktion wird bei allen Aktivities aufgerufen. Kann auf einmal
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
         switch (id) {
             case R.id.nav_dashboard: {
-                Log.d("myMessage","nav_dashboard");
                 Intent intent = new Intent(this,MainActivity.class);
+                setTitle(R.string.title_activity_dashboard);
                 startActivity(intent);
                 break;
             }
             case R.id.nav_tables: {
-                Log.d("myMessage","nav_tables");
                 Intent intent = new Intent(this,TablesActivity.class);
+                setTitle(R.string.title_activity_table);
                 startActivity(intent);
                 break;
             }
             case R.id.nav_products: {
-                Log.d("myMessage","nav_products");
                 Intent intent = new Intent(this,ProductGroupsActivity.class);
+                setTitle(R.string.title_activity_product_groups);
                 startActivity(intent);
-                setTitle("Produkte");
                 break;
             }
             case R.id.nav_settings: {
-                Log.d("myMessage","nav_settings");
                 Intent intent = new Intent(this,SettingsActivity.class);
+                setTitle(R.string.title_activity_settings);
                 startActivity(intent);
                 break;
             }
             case R.id.nav_logout: {
-                Log.d("myMessage","nav_logout");
-//                Intent intent = new Intent(this,MainActivity.class);
-//                startActivity(intent);
-                setTitle("Logout");
+                Intent intent = new Intent(this,LoginActivity.class);
+                setTitle(R.string.title_activity_login);
+                startActivity(intent);
                 break;
             }
             default: {
                 Log.d("myMessage","nav_default");
-
             }
         }
 
