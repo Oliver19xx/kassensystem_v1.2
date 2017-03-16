@@ -242,14 +242,13 @@ public class ProductListAdapter extends ArrayAdapter<Product> {
         builder.setNeutralButton(R.string.delete_product, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Log.d("testtest", "delete " + pr_id );
                 try {
                     HashMap<String, String> hashMap = new HashMap<>();
                     hashMap.put("method", "removeProduct");
                     hashMap.put("productID", pr_id+"".toString());
 
                     // Hole mir den Rückgabe-String und speicher ihn in einer Variable ab
-                    String jsonString = new ActivityDataSource(hashMap).execute().get();
+                     new ActivityDataSource(hashMap).execute().get();
 
                 } catch (Exception e) {
                     e.printStackTrace();
