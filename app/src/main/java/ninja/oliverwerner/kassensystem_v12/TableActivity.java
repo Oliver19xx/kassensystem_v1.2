@@ -207,7 +207,7 @@ public class TableActivity extends AppCompatActivity
         titel.append("Name: "+table.getTableName());
         titel.append(" ");
         titel.append("Status: "+state);
-        setTitle(titel.toString());
+        setTitle(table.getTableName());
     }
 
     @Override
