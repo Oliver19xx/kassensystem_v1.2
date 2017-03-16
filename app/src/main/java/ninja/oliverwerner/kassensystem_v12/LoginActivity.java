@@ -75,7 +75,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      */
     private final Context CONTEXT = this;
     private Snackbar snackbar;
-    private KeyboardController keyboardController;
 
     // UI references.
     private AutoCompleteTextView mEmailView;
@@ -149,7 +148,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
-        keyboardController = new KeyboardController(LoginActivity.this);
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
     }
@@ -263,7 +261,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      */
     private void attemptLogin() {
         // Focus von dem Textfeld nehmen
-        keyboardController.hideKeyboard();
+        KeyboardController.hideKeyboard(LoginActivity.this);
 
         // Reset errors.
         mServerView.setError(null);
@@ -336,7 +334,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                         OnClickListener mOnClickListener = new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                keyboardController.showKeyboard(mPasswordView);
+                                KeyboardController.showKeyboard(LoginActivity.this,mPasswordView);
                             }
                         };
                         showProgress(false);

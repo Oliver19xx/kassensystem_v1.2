@@ -1,19 +1,23 @@
 package ninja.oliverwerner.kassensystem_v12;
 
+import android.app.ActionBar;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -38,19 +42,19 @@ public class SettingsActivity extends AppCompatActivity
     private static final String THEME_COLOR = "THEME_COLOR";
 
     // Dateiname unter dem die Informationen gespeichert werden
-    private static final String FILENAME = "KS_SETTINGS";
+    private static final String FILENAME = "SETTINGS";
 
     // Tool zum Speichern und Lesen der Informationen in einer Datei
     SharedPreferences sharedPrefs;
 
     // Felder aus dem Activity-Layout
-    EditText etShopName;
-    Button btThemeColor;
-    Button btnSave;
+    private Button btShopName;
+    private ActionBar bar;
 
     // Für den Color-Picker
     private int currentBackgroundColor = 0xffffffff;
-    private View root;
+    private Button btThemeColor;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,11 +67,10 @@ public class SettingsActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         // Views des Layouts in Variablen laden
-        etShopName = (EditText) findViewById(R.id.et_shop_name);
+        btShopName = (Button) findViewById(R.id.bt_shop_name);
         btThemeColor = (Button) findViewById(R.id.bt_theme_color);
-        btnSave = (Button) findViewById(R.id.btn_save);
+        bar = getActionBar();
 
-        root = findViewById(R.id.color_screen);
         changeBackgroundColor(currentBackgroundColor);
         btThemeColor.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,23 +127,28 @@ public class SettingsActivity extends AppCompatActivity
                         .show();
             }
         });
-        // Beim Klick auf Speichern ...
-        btnSave.setOnClickListener(new View.OnClickListener() {
+
+        btShopName.setOnClickListener(new View.OnClickListener() {
                                        @Override
                                        public void onClick(View view) {
-                                           // Hole den aktuellen Text aus den Textfeldern und löschen Leerzeichen vom Anfang und Ende
-                                           String shopName = etShopName.getText().toString().trim();
-//                                           String themeColor = btThemeColor.getText().toString().trim();
+                                           final Dialog dialog = new Dialog(SettingsActivity.this);
+                                           dialog.setContentView(R.layout.edit_field_dialog);
+                                           dialog.setTitle("Geschäftsname");
 
-                                           // Stellt die Datei zum Schreiben bereit
-                                           SharedPreferences sharedPrefs = getSharedPreferences(FILENAME, 0);
+                                           final EditText dialogText = (EditText) dialog.findViewById(R.id.det_text);
+                                           Button dialogBtn = (Button) dialog.findViewById(R.id.dbt_save);
 
-                                           // Es wird ein "Bearbeiter" für die Datei erstellt
-                                           SharedPreferences.Editor editor = sharedPrefs.edit();
+                                           dialogText.setText(btShopName.getText().toString());
 
-                                           // Schreibe in die Datei an Feld x String y und speicher die Datei ab
-                                           editor.putString(SHOP_NAME, shopName).commit();
-//                                           editor.putString(THEME_COLOR, themeColor).commit();
+                                           dialogBtn.setOnClickListener(new View.OnClickListener() {
+                                                                            @Override
+                                                                            public void onClick(View view) {
+                                                                                btShopName.setText(dialogText.getText());
+                                                                                dialog.dismiss();
+                                                                            }
+                                                                        });
+
+                                           dialog.show();
                                        }
                                    }
 
@@ -171,11 +179,11 @@ public class SettingsActivity extends AppCompatActivity
 
     private void changeBackgroundColor(int selectedColor) {
         currentBackgroundColor = selectedColor;
-        root.setBackgroundColor(selectedColor);
+        btThemeColor.setBackgroundColor(selectedColor);
 
-        SharedPreferences sharedPrefs = getSharedPreferences(FILENAME, 0);
-        SharedPreferences.Editor editor = sharedPrefs.edit();
-        editor.putString(THEME_COLOR, ""+currentBackgroundColor).commit();
+        Log.d("TITLE-COLOR","#"+Integer.toHexString(currentBackgroundColor).toUpperCase());
+        ColorDrawable colorDrawable = new ColorDrawable(Color.parseColor("#"+Integer.toHexString(currentBackgroundColor).toUpperCase()));
+        getSupportActionBar().setBackgroundDrawable(colorDrawable);
     }
 
     private void toast(String text) {
@@ -185,12 +193,30 @@ public class SettingsActivity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
+        KeyboardController.hideKeyboard(SettingsActivity.this);
         // Lade die Datei zum Lesen
         sharedPrefs = getSharedPreferences(FILENAME, 0);
 
         // Trage den Text aus den Speicherplätzen in die Textfelder ein
-        etShopName.setText(sharedPrefs.getString(SHOP_NAME, null));
-        currentBackgroundColor = Integer.parseInt(sharedPrefs.getString(THEME_COLOR, null));
+        btShopName.setText(sharedPrefs.getString(SHOP_NAME, null));
+        Log.d("THEME_COLOR","loadColor: "+sharedPrefs.getInt(THEME_COLOR, 0xffffffff));
+        changeBackgroundColor(sharedPrefs.getInt(THEME_COLOR, 0xffffffff));
+
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        SharedPreferences sharedPrefs = getSharedPreferences(FILENAME, 0);
+        SharedPreferences.Editor editor = sharedPrefs.edit();
+
+        editor.putInt(THEME_COLOR, currentBackgroundColor);
+
+        String shopName = btShopName.getText().toString().trim();
+        editor.putString(SHOP_NAME, shopName);
+
+        editor.apply();
     }
 
     @Override
@@ -234,37 +260,37 @@ public class SettingsActivity extends AppCompatActivity
 
         switch (id) {
             case R.id.nav_dashboard: {
-                Intent intent = new Intent(this,MainActivity.class);
+                Intent intent = new Intent(this, MainActivity.class);
                 setTitle(R.string.title_activity_dashboard);
                 startActivity(intent);
                 break;
             }
             case R.id.nav_tables: {
-                Intent intent = new Intent(this,TablesActivity.class);
+                Intent intent = new Intent(this, TablesActivity.class);
                 setTitle(R.string.title_activity_table);
                 startActivity(intent);
                 break;
             }
             case R.id.nav_products: {
-                Intent intent = new Intent(this,ProductGroupsActivity.class);
+                Intent intent = new Intent(this, ProductGroupsActivity.class);
                 setTitle(R.string.title_activity_product_groups);
                 startActivity(intent);
                 break;
             }
             case R.id.nav_settings: {
-                Intent intent = new Intent(this,SettingsActivity.class);
+                Intent intent = new Intent(this, SettingsActivity.class);
                 setTitle(R.string.title_activity_settings);
                 startActivity(intent);
                 break;
             }
             case R.id.nav_logout: {
-                Intent intent = new Intent(this,LoginActivity.class);
+                Intent intent = new Intent(this, LoginActivity.class);
                 setTitle(R.string.title_activity_login);
                 startActivity(intent);
                 break;
             }
             default: {
-                Log.d("myMessage","nav_default");
+                Log.d("myMessage", "nav_default");
             }
         }
 

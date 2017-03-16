@@ -1,6 +1,9 @@
 package ninja.oliverwerner.kassensystem_v12;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -43,12 +46,13 @@ public class MainActivity extends AppCompatActivity
     EditText edit_year;
     EditText edit_month;
     EditText edit_day;
-    KeyboardController keyboardController;
+    SharedPreferences sharedPrefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -368,7 +372,17 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
-        keyboardController = new KeyboardController(MainActivity.this);
-        keyboardController.hideKeyboard();
+
+        KeyboardController.hideKeyboard(MainActivity.this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        sharedPrefs = getSharedPreferences("SETTINGS", 0);
+        int currentBackgroundColor = sharedPrefs.getInt("THEME_COLOR", 0xffffffff);
+        ColorDrawable colorDrawable = new ColorDrawable(Color.parseColor("#"+Integer.toHexString(currentBackgroundColor).toUpperCase()));
+        getSupportActionBar().setBackgroundDrawable(colorDrawable);
     }
 }
