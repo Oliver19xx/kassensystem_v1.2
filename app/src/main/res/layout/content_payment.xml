@@ -34,13 +34,19 @@
             android:layout_above="@+id/EnterPays_PaysList"
             android:layout_toRightOf="@+id/EnterPays_addAtomPayment"
             android:layout_weight="0.08" />
-
+        <Button
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/all_Button"
+            android:gravity="center"
+            android:text="@string/all_selected" />
         <TextView
+
             android:text="0,00"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:id="@+id/sum_price"
-            android:textSize="30sp"
+            android:textSize="25sp"
             android:gravity="right"
             android:layout_weight="1.00" />
         <TextView
@@ -48,7 +54,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:id="@+id/currency"
-            android:textSize="30sp"
+            android:textSize="25sp"
             android:gravity="left"
             android:layout_weight="1.00" />
     </LinearLayout>

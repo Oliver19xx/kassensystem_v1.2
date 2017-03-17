@@ -35,23 +35,16 @@ public class PaymentActivity extends AppCompatActivity
     private PaymentListAdapter adapter = null;
     int tableID = 0;
     Button payment_button;
+    Button all_button;
     static TextView sum_Price;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTitle("Bezahlen");
         setContentView(R.layout.activity_payment);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -62,6 +55,28 @@ public class PaymentActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        all_button = (Button) findViewById(R.id.all_Button);
+        all_button.setOnClickListener( new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                double dCost = 0;
+                for(int iGr = 0; iGr < adapter.getCount(); iGr++){
+                    int productid = adapter.getItem(iGr).getProductID();
+                    String name = adapter.getItem(iGr).getName() + "".toString();
+                    double dPri = adapter.getItem(iGr).getPrice();
+                    int tableid = adapter.getItem(iGr).getTableId();
+                    int value = adapter.getItem(iGr).getNumber();
+                    dCost += (value*dPri);
+                    dCost = Math.round(dCost * 100);
+                    dCost = dCost / 100;
+
+                    adapter.remove(adapter.getItem(iGr));
+                    adapter.insert(new Product(productid, name, dPri , value, tableid, value), iGr);
+                }
+                sum_Price.setText(dCost+"");
+            }
+        });
+
         payment_button = (Button) findViewById(R.id.pay_Button);
         payment_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,12 +86,10 @@ public class PaymentActivity extends AppCompatActivity
                 for(int iGr = 0; iGr < i; iGr++){
                     int productid = adapter.getItem(iGr).getProductID();
                     String name = adapter.getItem(iGr).getName() + "".toString();
-                    String sPri = adapter.getItem(iGr).getPrice() + "".toString();
-                    String sBez = adapter.getItem(iGr).getNumber() + "".toString();
+                    double dPri  = adapter.getItem(iGr).getPrice();
+                    int orderValue = adapter.getItem(iGr).getNumber();
                     int tableid = adapter.getItem(iGr).getTableId();
                     int value = adapter.getItem(iGr).getValue();
-                    int orderValue = Integer.parseInt(sBez.toString());
-                    double dPri = Double.parseDouble(sPri.toString());
                     int new_anz = orderValue - value;
                     
                     if(value > 0) {

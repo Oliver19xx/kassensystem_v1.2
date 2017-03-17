@@ -101,6 +101,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTitle("Login");
 
         //todo Short-Cut erstellen (läuft noch nicht)
 //        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
