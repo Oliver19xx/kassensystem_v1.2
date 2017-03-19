@@ -94,5 +94,6 @@
     <string name="theme_color">Primärfarbe</string>
     <string name="store_name">Geschäftsname</string>
     <string name="color_dialog_title">Farbauswahl</string>
+    <string name="change_password">Passwort ändern</string>
 
 </resources>

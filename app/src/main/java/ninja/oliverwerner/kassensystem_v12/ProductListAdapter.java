@@ -139,8 +139,6 @@ public class ProductListAdapter extends ArrayAdapter<Product> {
                         Snackbar.make(view, "Produkt hinzugefügt", Snackbar.LENGTH_SHORT)
                                 .setAction("Action", null).show();
                     }else{
-                        Snackbar.make(view, "You will change the product ", Snackbar.LENGTH_LONG)
-                                .setAction("Action", null).show();
                         int productid = getItem(position).getProductID();
                         String name = getItem(position).getName() + "".toString();
                         String sPri = getItem(position).getPrice() + "".toString();

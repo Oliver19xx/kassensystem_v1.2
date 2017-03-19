@@ -1,6 +1,7 @@
 package ninja.oliverwerner.kassensystem_v12;
 
 import android.app.ActionBar;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -13,6 +14,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -24,6 +26,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.flask.colorpicker.ColorPickerView;
@@ -32,10 +35,14 @@ import com.flask.colorpicker.OnColorSelectedListener;
 import com.flask.colorpicker.builder.ColorPickerClickListener;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 
+import java.util.HashMap;
+
 public class SettingsActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private static Context CONTEXT;
+
+    static public int user_id;
 
     // Festgelegte Feldname für die Speicherplätze in der Datei
     private static final String SHOP_NAME = "SHOP_NAME";
@@ -54,6 +61,8 @@ public class SettingsActivity extends AppCompatActivity
     // Für den Color-Picker
     private int currentBackgroundColor = 0xffffffff;
     private Button btThemeColor;
+
+    private Button btPassword;
 
 
     @Override
@@ -153,6 +162,15 @@ public class SettingsActivity extends AppCompatActivity
                                    }
 
         );
+
+        btPassword = (Button) findViewById(R.id.setPassword);
+        btPassword.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                changePassword(view);
+            }
+        });
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -284,5 +302,48 @@ public class SettingsActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+    public void changePassword(final View v) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.change_password);
+        LinearLayout layout = new LinearLayout(this);
+        layout.setOrientation(LinearLayout.VERTICAL);
+
+        final EditText oldPw = new EditText(this);
+        final EditText newPw1 = new EditText(this);
+        final EditText newPw2 = new EditText(this);
+
+        oldPw.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        newPw1.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        newPw2.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        oldPw.setHint("Altes Passwort");
+        newPw1.setHint("Neues Passwort");
+        newPw2.setHint("Neues Passwort Wiederholt");
+        layout.addView(oldPw);
+        layout.addView(newPw1);
+        layout.addView(newPw2);
+        builder.setView(layout);
+
+        // Set up the buttons
+        builder.setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String pwOld = oldPw.getText().toString();
+                String pwNew1 = newPw1.getText().toString();
+                String pwNew2 = newPw2.getText().toString();
+                if (pwNew1.equals(pwNew2)) {
+                    Snackbar.make(v, "Passwort von "+pwOld + " zu "+newPw1 + " geändert", Snackbar.LENGTH_SHORT)
+                            .setAction("Action", null).show();
+                }
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
     }
 }
