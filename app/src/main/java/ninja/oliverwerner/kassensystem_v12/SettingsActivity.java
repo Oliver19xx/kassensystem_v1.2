@@ -15,6 +15,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.text.InputType;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -313,9 +314,10 @@ public class SettingsActivity extends AppCompatActivity
         final EditText newPw1 = new EditText(this);
         final EditText newPw2 = new EditText(this);
 
-        oldPw.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
-        newPw1.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
-        newPw2.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+
+        oldPw.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        newPw1.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        newPw2.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
         oldPw.setHint("Altes Passwort");
         newPw1.setHint("Neues Passwort");
         newPw2.setHint("Neues Passwort Wiederholt");
@@ -325,14 +327,33 @@ public class SettingsActivity extends AppCompatActivity
         builder.setView(layout);
 
         // Set up the buttons
-        builder.setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+
                 String pwOld = oldPw.getText().toString();
-                String pwNew1 = newPw1.getText().toString();
-                String pwNew2 = newPw2.getText().toString();
-                if (pwNew1.equals(pwNew2)) {
-                    Snackbar.make(v, "Passwort von "+pwOld + " zu "+newPw1 + " geändert", Snackbar.LENGTH_SHORT)
+                String pwNew1 = Base64.encodeToString(newPw1.getText().toString().getBytes(), Base64.DEFAULT);
+                pwNew1 = pwNew1.replace("\n","");
+                String pwNew2 = Base64.encodeToString(newPw2.getText().toString().getBytes(), Base64.DEFAULT);
+                pwNew2 = pwNew2.replace("\n","");
+                if (pwNew1.equals(pwNew2) && pwNew1.length() >= 4) {
+                    try {
+                        HashMap<String, String> hashMap = new HashMap<>();
+                        hashMap.put("method", "changePassword");
+                        hashMap.put("user_id", user_id+"" );
+                        hashMap.put("pw_old", pwOld);
+                        hashMap.put("pw_new", pwNew1);
+
+                        new ActivityDataSource(hashMap).execute().get();
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                }else if (pwNew1.length() < 4) {
+                    Snackbar.make(v, "Passwort zu kurz!!!", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
+                }else{
+                    Snackbar.make(v, "Eingaben für das neue Passwort stimmen nicht überein", Snackbar.LENGTH_SHORT)
                             .setAction("Action", null).show();
                 }
             }

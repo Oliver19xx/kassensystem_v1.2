@@ -324,8 +324,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     JSONObject jsonObject = jsonResponse.getJSONObject("data");
                     int return_message = jsonObject.getInt("user_id");
                     Log.d("return_message", return_message+"");
-                    if (return_message > 0){
-
+                    if (return_message != -1){
+                        SettingsActivity.user_id = return_message;
                         Log.d("Login:", "login_success");
                         Snackbar.make(findViewById(android.R.id.content), "Login erfolgreich!", Snackbar.LENGTH_INDEFINITE)
                                 .setDuration(8000)
