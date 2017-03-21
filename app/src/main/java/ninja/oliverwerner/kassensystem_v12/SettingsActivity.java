@@ -28,6 +28,7 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.flask.colorpicker.ColorPickerView;
@@ -155,6 +156,8 @@ public class SettingsActivity extends AppCompatActivity
                                                                             public void onClick(View view) {
                                                                                 btShopName.setText(dialogText.getText());
                                                                                 dialog.dismiss();
+                                                                                TextView shopname = (TextView) findViewById(R.id.store_name);
+                                                                                shopname.setText(btShopName.getText().toString());
                                                                             }
                                                                         });
 
@@ -207,6 +210,11 @@ public class SettingsActivity extends AppCompatActivity
         btShopName.setText(sharedPrefs.getString(SHOP_NAME, null));
         Log.d("THEME_COLOR","loadColor: "+sharedPrefs.getInt(THEME_COLOR, 0xffffffff));
         changeBackgroundColor(sharedPrefs.getInt(THEME_COLOR, 0xffffffff));
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        View headerView = navigationView.getHeaderView(0);
+        TextView shopname = (TextView) headerView.findViewById(R.id.store_name);
+        shopname.setText(sharedPrefs.getString("SHOP_NAME", "Geschäftsnamen"));
 
 
     }

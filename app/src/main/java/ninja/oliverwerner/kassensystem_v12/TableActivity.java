@@ -1,6 +1,9 @@
 package ninja.oliverwerner.kassensystem_v12;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -17,6 +20,7 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Switch;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -33,6 +37,7 @@ public class TableActivity extends AppCompatActivity
     private ProductListAdapter adapter = null;
     int tableID = 0;
     Button payment_button;
+    SharedPreferences sharedPrefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -214,6 +219,18 @@ public class TableActivity extends AppCompatActivity
     protected void onResume() {
         super.onResume();
         loadOrderedList(tableID+"");
+
+        sharedPrefs = getSharedPreferences("SETTINGS", 0);
+        int currentBackgroundColor = sharedPrefs.getInt("THEME_COLOR", 0xffffffff);
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        View headerView = navigationView.getHeaderView(0);
+        TextView shopname = (TextView) headerView.findViewById(R.id.store_name);
+        shopname.setText(sharedPrefs.getString("SHOP_NAME", "Geschäftsnamen"));
+
+        ColorDrawable colorDrawable = new ColorDrawable(Color.parseColor("#"+Integer.toHexString(currentBackgroundColor).toUpperCase()));
+        getSupportActionBar().setBackgroundDrawable(colorDrawable);
+
     }
 
 

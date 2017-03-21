@@ -46,12 +46,14 @@ public class MainActivity extends AppCompatActivity
     EditText edit_year;
     EditText edit_month;
     EditText edit_day;
+
     SharedPreferences sharedPrefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle("Übersicht");
+
         setContentView(R.layout.activity_main);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -374,6 +376,12 @@ public class MainActivity extends AppCompatActivity
 
         sharedPrefs = getSharedPreferences("SETTINGS", 0);
         int currentBackgroundColor = sharedPrefs.getInt("THEME_COLOR", 0xffffffff);
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        View headerView = navigationView.getHeaderView(0);
+        TextView shopname = (TextView) headerView.findViewById(R.id.store_name);
+        shopname.setText(sharedPrefs.getString("SHOP_NAME", "Geschäftsnamen"));
+
         ColorDrawable colorDrawable = new ColorDrawable(Color.parseColor("#"+Integer.toHexString(currentBackgroundColor).toUpperCase()));
         getSupportActionBar().setBackgroundDrawable(colorDrawable);
     }

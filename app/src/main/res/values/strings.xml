@@ -5,7 +5,7 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Einstellungen</string>
-    <string name="title_activity_tables">TablesActivity</string>
+    <string name="title_activity_tables">Tische</string>
 
     <!-- side-menu -->
     <string name="nav_dashboard">Übersicht</string>
@@ -22,7 +22,7 @@
     <string name="table_state_taken">besetzt</string>
     <string name="table_state_reserved">reserviert</string>
     <string name="table_state_free">frei</string>
-    <string name="title_activity_table">TableActivity</string>
+    <string name="title_activity_table">Tische</string>
 
     <!-- add-table -->
     <string name="add_table">Tisch hinzufügen</string>
@@ -45,14 +45,14 @@
     <string name="sum_pay_price">0.00</string>
     <string name="pay_button">Bezahlen</string>
     <string name="title_activity_product_groups">Produktgruppen</string>
-    <string name="title_activity_products">ProductsActivity</string>
-    <string name="title_activity_tables_settings">TablesSettingsActivity</string>
+    <string name="title_activity_products">Produkte</string>
+    <string name="title_activity_tables_settings">Tischeinstellungen</string>
 
     <!-- essentials -->
     <string name="apply">anwenden</string>
     <string name="cancel">abbrechen</string>
     <string name="add">hinzufügen</string>
-    <string name="title_activity_payment">PaymentActivity</string>
+    <string name="title_activity_payment">Bezahlen</string>
 
     <!-- payment -->
     <string name="currency">€</string>

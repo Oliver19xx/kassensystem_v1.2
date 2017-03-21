@@ -19,6 +19,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.GridView;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -54,13 +55,17 @@ public class TablesActivity extends AppCompatActivity implements NavigationView.
     @Override
     protected void onResume() {
         super.onResume();
-        loadTables();
 
-            sharedPrefs = getSharedPreferences("SETTINGS", 0);
-            int currentBackgroundColor = sharedPrefs.getInt("THEME_COLOR", 0xffffffff);
-            ColorDrawable colorDrawable = new ColorDrawable(Color.parseColor("#"+Integer.toHexString(currentBackgroundColor).toUpperCase()));
-            getSupportActionBar().setBackgroundDrawable(colorDrawable);
+        sharedPrefs = getSharedPreferences("SETTINGS", 0);
+        int currentBackgroundColor = sharedPrefs.getInt("THEME_COLOR", 0xffffffff);
 
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        View headerView = navigationView.getHeaderView(0);
+        TextView shopname = (TextView) headerView.findViewById(R.id.store_name);
+        shopname.setText(sharedPrefs.getString("SHOP_NAME", "Geschäftsnamen"));
+
+        ColorDrawable colorDrawable = new ColorDrawable(Color.parseColor("#"+Integer.toHexString(currentBackgroundColor).toUpperCase()));
+        getSupportActionBar().setBackgroundDrawable(colorDrawable);
     }
 
     @Override

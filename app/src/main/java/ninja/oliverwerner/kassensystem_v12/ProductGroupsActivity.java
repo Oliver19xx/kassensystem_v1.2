@@ -3,6 +3,9 @@ package ninja.oliverwerner.kassensystem_v12;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -21,6 +24,7 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,6 +36,7 @@ import java.util.HashMap;
 public class ProductGroupsActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     static int table_id = 0 ;
+    SharedPreferences sharedPrefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -207,7 +212,7 @@ public class ProductGroupsActivity extends AppCompatActivity
                 String prGroup = editGroup.getText().toString();
                 String prName = editName.getText().toString();
                 String prPrice = editprice.getText().toString();
-                if (prGroup != "" && prName != "" && prPrice != "") {
+                if (!prGroup.equals("") && !prName.equals("") && !prPrice.equals("")) {
                     try {
                         HashMap<String, String> hashMap = new HashMap<>();
                         hashMap.put("method", "addProduct");
@@ -231,5 +236,21 @@ public class ProductGroupsActivity extends AppCompatActivity
         });
 
         builder.show();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        sharedPrefs = getSharedPreferences("SETTINGS", 0);
+        int currentBackgroundColor = sharedPrefs.getInt("THEME_COLOR", 0xffffffff);
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        View headerView = navigationView.getHeaderView(0);
+        TextView shopname = (TextView) headerView.findViewById(R.id.store_name);
+        shopname.setText(sharedPrefs.getString("SHOP_NAME", "Geschäftsnamen"));
+
+        ColorDrawable colorDrawable = new ColorDrawable(Color.parseColor("#"+Integer.toHexString(currentBackgroundColor).toUpperCase()));
+        getSupportActionBar().setBackgroundDrawable(colorDrawable);
     }
 }
