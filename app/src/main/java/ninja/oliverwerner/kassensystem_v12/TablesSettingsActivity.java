@@ -1,15 +1,14 @@
 package ninja.oliverwerner.kassensystem_v12;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
@@ -22,7 +21,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
-import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -32,10 +30,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
-
-import static android.R.id.input;
 
 public class TablesSettingsActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -104,7 +98,7 @@ public class TablesSettingsActivity extends AppCompatActivity
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // TODO: 12.12.2016 Diese Funktion wird bei allen Aktivities aufgerufen. Kann auf einmal
         // Handle navigation view item clicks here.
         int id = item.getItemId();
@@ -151,7 +145,7 @@ public class TablesSettingsActivity extends AppCompatActivity
     }
 
     public void loadTableSettings() {
-        ArrayList<Table> tableList = new ArrayList<Table>();
+        ArrayList<Table> tableList = new ArrayList<>();
 
         try {
             // HashMap erstellen und Daten für die DB-Abfrage im Inneren speichern
@@ -195,7 +189,6 @@ public class TablesSettingsActivity extends AppCompatActivity
         builder.setTitle(R.string.add_table);
 
         final EditText editText = new EditText(this);
-        // TODO: 16.01.2017 placeholder
         editText.setInputType(InputType.TYPE_CLASS_TEXT);
         builder.setView(editText);
 
@@ -204,8 +197,7 @@ public class TablesSettingsActivity extends AppCompatActivity
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String tableName = editText.getText().toString();
-                Log.d("myMessage", "addTable: " + tableName);
-                if (tableName != "") {
+                if (!tableName.equals("")) {
                     try {
                         HashMap<String, String> hashMap = new HashMap<>();
                         hashMap.put("method", "addTable");

@@ -7,8 +7,8 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
@@ -21,7 +21,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
-import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -105,7 +104,7 @@ public class ProductsActivity extends AppCompatActivity
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // TODO: 12.12.2016 Diese Funktion wird bei allen Aktivities aufgerufen. Kann auf einmal
         // Handle navigation view item clicks here.
         int id = item.getItemId();
@@ -152,7 +151,7 @@ public class ProductsActivity extends AppCompatActivity
     }
 
     public void loadProducts(String pGroupID){
-        ArrayList<Product> productsList = new ArrayList<Product>();
+        ArrayList<Product> productsList = new ArrayList<>();
 
         try {
             // HashMap erstellen und Daten für die DB-Abfrage im Inneren speichern
@@ -226,7 +225,7 @@ public class ProductsActivity extends AppCompatActivity
             public void onClick(DialogInterface dialog, int which) {
                 String prName = editName.getText().toString();
                 String prPrice = editprice.getText().toString();
-                if(prName != "" && prPrice != ""){
+                if(!prName.equals("") && prPrice.equals("")){
                     try {
                         HashMap<String, String> hashMap = new HashMap<>();
                         hashMap.put("method", "addProduct");

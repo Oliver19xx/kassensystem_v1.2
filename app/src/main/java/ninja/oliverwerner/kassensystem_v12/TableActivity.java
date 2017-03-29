@@ -5,8 +5,8 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -27,7 +27,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class TableActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -70,7 +69,7 @@ public class TableActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), PaymentActivity.class);
-                intent.putExtra("table_id", tableID+"".toString());
+                intent.putExtra("table_id", tableID+ "");
                 startActivity(intent);
             }
         });
@@ -121,7 +120,7 @@ public class TableActivity extends AppCompatActivity
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // TODO: 12.12.2016 Diese Funktion wird bei allen Aktivities aufgerufen. Kann auf einmal
         // Handle navigation view item clicks here.
         int id = item.getItemId();
@@ -190,28 +189,7 @@ public class TableActivity extends AppCompatActivity
         }catch (Exception e){
             e.printStackTrace();
         }
-        
-        String state="";
-        // TODO: 11.12.2016 string aus resourcen ziehen
-        switch (table.getTableState()){
-            case 0:
-                state = "frei";
-                break;
-            case 1:
-                state = "reserviert";
-                break;
-            case 2:
-                state = "besetzt";
-                break;
-            default:
-        }
 
-        StringBuilder titel = new StringBuilder();
-        titel.append("ID: "+table.getTableId());
-        titel.append(" ");
-        titel.append("Name: "+table.getTableName());
-        titel.append(" ");
-        titel.append("Status: "+state);
         setTitle(table.getTableName());
     }
 

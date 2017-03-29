@@ -5,8 +5,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.MenuInflater;
 import android.view.View;
@@ -107,7 +106,7 @@ public class TablesActivity extends AppCompatActivity implements NavigationView.
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // TODO: 12.12.2016 Diese Funktion wird bei allen Aktivities aufgerufen. Kann auf einmal
         // Handle navigation view item clicks here.
         int id = item.getItemId();
@@ -154,7 +153,7 @@ public class TablesActivity extends AppCompatActivity implements NavigationView.
     }
 
     private void loadTables() {
-        ArrayList<Table> tableList = new ArrayList<Table>();
+        ArrayList<Table> tableList = new ArrayList<>();
 
         try {
             // HashMap erstellen und Daten für die DB-Abfrage im Inneren speichern

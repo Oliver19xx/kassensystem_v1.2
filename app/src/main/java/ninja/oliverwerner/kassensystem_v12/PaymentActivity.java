@@ -7,8 +7,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -27,7 +26,6 @@ import android.widget.TextView;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONStringer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -89,7 +87,7 @@ public class PaymentActivity extends AppCompatActivity
                 JSONArray dataArray = new JSONArray();
                 for(int iGr = 0; iGr < i; iGr++){
                     int productid = adapter.getItem(iGr).getProductID();
-                    String name = adapter.getItem(iGr).getName() + "".toString();
+                    String name = adapter.getItem(iGr).getName();
                     double dPri  = adapter.getItem(iGr).getPrice();
                     int orderValue = adapter.getItem(iGr).getNumber();
                     int tableid = adapter.getItem(iGr).getTableId();
@@ -120,7 +118,7 @@ public class PaymentActivity extends AppCompatActivity
                 try {
                     HashMap<String, String> hashMap = new HashMap<>();
                     hashMap.put("method", "payOrder");
-                    hashMap.put("table_id", tableID+"".toString());
+                    hashMap.put("table_id", tableID+"");
                     hashMap.put("paid_products", dataArray.toString());
                     // Hole mir den Rückgabe-String und speicher ihn in einer Variable ab
                     String jsonString = new ActivityDataSource(hashMap).execute().get();
@@ -183,7 +181,7 @@ public class PaymentActivity extends AppCompatActivity
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // TODO: 12.12.2016 Diese Funktion wird bei allen Aktivities aufgerufen. Kann auf einmal
         // Handle navigation view item clicks here.
         int id = item.getItemId();
