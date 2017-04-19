@@ -149,14 +149,10 @@ public class ProductListAdapter extends ArrayAdapter<Product> {
                 }
             });
         }
-
-
         return v;
-
     }
     public void yes_no_dialog(final int ipos, final int tableid, final int productid){
         builder = new AlertDialog.Builder(context);
-        builder.setTitle("Title");
         builder.setMessage("You want to delete ");
 
         builder.setPositiveButton("YES", new DialogInterface.OnClickListener(){

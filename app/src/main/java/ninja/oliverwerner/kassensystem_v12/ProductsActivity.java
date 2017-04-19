@@ -202,31 +202,47 @@ public class ProductsActivity extends AppCompatActivity
         ProductListAdapter adapter = new ProductListAdapter(this, R.layout.product_list_item_layout, productsList); // TODO: 15.12.2016 Adapter testen
         lvProducts.setAdapter(adapter);
     }
+
+    // Funktion für erstellen des Dialog beim hinzufügen eines Produktes
     public void addProduct(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.add_product);
+
+        //Lineares Layout für die Felder Erstellen
         LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.VERTICAL);
 
+        //Die Beiden EditText Felder werden initilisiert
         final EditText editName = new EditText(this);
         final EditText editprice = new EditText(this);
 
+        //Bei Beiden Feldern wird der Input Typ festgelegt
         editName.setInputType(InputType.TYPE_CLASS_TEXT);
         editprice.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
+
+        //Bei beiden Feldern wird als Hintergrundschrift der Jeweilige Inhalt festgelegt
         editName.setHint("Produktname");
         editprice.setHint("Preis");
+
+        //Die Beiden Felder werden in das Lineare Layout gepackt
         layout.addView(editName);
         layout.addView(editprice);
+
         builder.setView(layout);
 
-        // Set up the buttons
+        // Inistalisieren des "OK" Buttons
         builder.setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                //die Daten die eingetragen wurden werden in die beiden Variablen geschrieben
                 String prName = editName.getText().toString();
                 String prPrice = editprice.getText().toString();
+
+                //Sobald beide Felder nicht leer sind beginnt das schreiben in die Datenbank
                 if(!prName.equals("") && prPrice.equals("")){
                     try {
+                        //Es wird Festgelegt welche Funktion aus dem PHP Skript verwendet werden soll
+                        //Sowie welche Variablen übergeben werden
                         HashMap<String, String> hashMap = new HashMap<>();
                         hashMap.put("method", "addProduct");
                         hashMap.put("productName", prName );
@@ -234,9 +250,10 @@ public class ProductsActivity extends AppCompatActivity
                         hashMap.put("productGroup", prgrp_name);
                         new ActivityDataSource(hashMap).execute().get();
 
+                        //die Produkte werden neu geladen
+
                         loadProducts(prgrp_id);
                     } catch (Exception e) {
-                        Log.d("myMessage","addTableDialog - Exception: "+e.getMessage());
                         e.printStackTrace();
                     }
                 }

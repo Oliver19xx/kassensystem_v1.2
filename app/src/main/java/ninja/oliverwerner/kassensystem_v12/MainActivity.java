@@ -57,6 +57,9 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        /*
+         * Give the Table Button the function to start the TablesActivity
+         */
         table_button = (Button) findViewById(R.id.main_table);
         table_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,6 +68,7 @@ public class MainActivity extends AppCompatActivity
                 startActivity(intent);
             }
         });
+
         product_button = (Button) findViewById(R.id.main_product);
         product_button.setOnClickListener(new View.OnClickListener() {
             @Override
