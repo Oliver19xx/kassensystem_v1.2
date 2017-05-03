@@ -37,7 +37,7 @@ public class TableGridAdapter extends BaseAdapter {
     public View getView(final int position, final View convertView, ViewGroup parent) {
 
         View v;
-        Button button;
+        Button button = new Button(context);
 
 
         if (convertView == null) {

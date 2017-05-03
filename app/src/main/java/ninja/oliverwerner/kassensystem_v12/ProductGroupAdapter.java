@@ -36,40 +36,44 @@ public class ProductGroupAdapter extends BaseAdapter {
 
         View item;
         Button button = new Button(context);
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
-
 
         if (convertView == null) {
-            item = new View(context);
-            item = inflater.inflate(this.resource,null);
-            button = (Button) item.findViewById(R.id.grid_button);
-            ProductGroup productGroup = (ProductGroup)getItem(position);
-            button.setText(productGroup.getpGroupName());
+            LayoutInflater li = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
+            item = li.inflate(resource, parent, false);
         } else {
             item = convertView;
         }
+        try{
+            button = new Button(context);
+            button = (Button) item.findViewById(R.id.grid_button);
+            ProductGroup productGroup = (ProductGroup)getItem(position);
+            button.setText(productGroup.getpGroupName());
+            button.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View view) {
+                    StringBuilder sb = new StringBuilder();
+                    sb.append("");
+                    sb.append(getItem(position).getpGroupId());
+                    String productGroupId = sb.toString();
 
-        button.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                StringBuilder sb = new StringBuilder();
-                sb.append("");
-                sb.append(getItem(position).getpGroupId());
-                String productGroupId = sb.toString();
+                    String productGroupName = getItem(position).getpGroupName();
 
-                String productGroupName = getItem(position).getpGroupName();
+                    // Übergabe-Daten sammeln
+                    Bundle bundle = new Bundle();
+                    bundle.putString("method", "getProducts");
+                    bundle.putString("pGroupID", productGroupId);
+                    bundle.putString("productGroupName", productGroupName);
 
-                // Übergabe-Daten sammeln
-                Bundle bundle = new Bundle();
-                bundle.putString("method", "getProducts");
-                bundle.putString("pGroupID", productGroupId);
-                bundle.putString("productGroupName", productGroupName);
+                    // TableActivity starten
+                    Intent intent = new Intent(view.getContext(), ProductsActivity.class);
+                    intent.putExtras(bundle);
+                    context.startActivity(intent);
+                }
+            });
+        } catch (Exception e){
+            e.getStackTrace();
+        }
 
-                // TableActivity starten
-                Intent intent = new Intent(view.getContext(), ProductsActivity.class);
-                intent.putExtras(bundle);
-                context.startActivity(intent);
-            }
-        });
+
         return item;
     }
 

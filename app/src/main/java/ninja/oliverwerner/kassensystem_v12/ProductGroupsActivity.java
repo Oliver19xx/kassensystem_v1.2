@@ -182,7 +182,7 @@ public class ProductGroupsActivity extends AppCompatActivity
         GridView gvTables = (GridView) findViewById(R.id.gvProductGroups);
         Log.d("myMessage","tableList.length()="+productGroupsList.size());
         ProductGroupAdapter adapter = new ProductGroupAdapter(this, R.layout.custom_button_layout, productGroupsList);
-        Log.d("myMessage","TableGridAdapter => "+adapter);
+        Log.d("myMessage","TableGridAdapter => "+adapter.toString());
         gvTables.setAdapter(adapter);
     }
     public void addProduct() {
