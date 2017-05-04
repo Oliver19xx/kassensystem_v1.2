@@ -239,7 +239,7 @@ public class ProductsActivity extends AppCompatActivity
                 String prPrice = editprice.getText().toString();
 
                 //Sobald beide Felder nicht leer sind beginnt das schreiben in die Datenbank
-                if(!prName.equals("") && prPrice.equals("")){
+                if(!prName.equals("") && !prPrice.equals("")){
                     try {
                         //Es wird Festgelegt welche Funktion aus dem PHP Skript verwendet werden soll
                         //Sowie welche Variablen übergeben werden

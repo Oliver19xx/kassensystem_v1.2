@@ -133,7 +133,6 @@ public class ProductListAdapter extends ArrayAdapter<Product> {
                             hashMap.put("mp_operator", "+");
                             new ActivityDataSource(hashMap).execute().get();
                         } catch (Exception e) {
-                            Log.d("testtest",e+"");
                             e.printStackTrace();
                         }
                         Snackbar.make(view, "Produkt hinzugefügt", Snackbar.LENGTH_SHORT)
@@ -143,7 +142,6 @@ public class ProductListAdapter extends ArrayAdapter<Product> {
                         String name = getItem(position).getName() + "".toString();
                         String sPri = getItem(position).getPrice() + "".toString();
                         int sGroup = getItem(position).getProductGroup();
-                        Log.d("testtest", productid + " " + name + " " + sPri + " " + position);
                         changeProduct(productid, name, sPri, position, sGroup);
                     }
                 }
